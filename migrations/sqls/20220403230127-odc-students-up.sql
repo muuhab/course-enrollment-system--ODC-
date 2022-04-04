@@ -5,5 +5,8 @@ CREATE TABLE odc_students (
     student_phone VARCHAR(55),
     student_address VARCHAR(100),
     college VARCHAR(44),
+    image VARCHAR(255),
     create_at TIMESTAMP DEFAULT Now()
 );
+
+-- 

@@ -16,7 +16,6 @@ app.use(
 app.use(morgan("combined"));
 app.use(helmet());
 app.use(cors());
-app.use(routes);
 app.listen(PORT, function () {
   console.log(`starting app on: http://localhost:${PORT}`);
 });
