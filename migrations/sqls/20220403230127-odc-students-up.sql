@@ -9,4 +9,4 @@ CREATE TABLE odc_students (
     create_at TIMESTAMP DEFAULT Now()
 );
 
--- 
+-- INSERT INTO odc_students (student_name, email, student_phone, student_address, college, image) VALUES (student_name, 'email', 'student_phone', 'student_address', 'college', 'image')

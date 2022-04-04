@@ -1,4 +1,7 @@
 const client = require("../database");
+const bcrypt = require("bcrypt");
+
+const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env;
 
 class AdminStore {
   async index() {
@@ -27,13 +30,18 @@ class AdminStore {
   async create(admin) {
     try {
       const sql =
-        "INSERT INTO odc_admins(role,username,email,password,image) VALUES($1, $2, $3, $4, $5) RETURNING *";
-      const conn = await client.connect();
+        "INSERT INTO odc_admins (role,username,email,password,image) VALUES($1, $2, $3, $4, $5) RETURNING *";
+        const conn = await client.connect();
+        const hash = bcrypt.hashSync(
+          admin.password + BCRYPT_PASSWORD,
+          parseInt(SALT_ROUNDS)
+          );
+
       const result = await conn.query(sql, [
         admin.role,
         admin.username,
         admin.email,
-        admin.password,
+        hash,
         admin.image,
       ]);
       conn.release();
@@ -42,7 +50,6 @@ class AdminStore {
       throw new Error(`Something Wrong ${error}`);
     }
   }
-  
 
   async update(admin, id) {
     try {
@@ -73,6 +80,19 @@ class AdminStore {
     } catch (error) {
       throw new Error(`Something Wrong ${error}`);
     }
+  }
+
+  async authenticate(username, password) {
+    const sql = "SELECT * FROM odc_admins WHERE username=($1)";
+    const conn = await client.connect();
+    const result = await conn.query(sql, [username]);
+    conn.release();
+    if (result.rows.length) {
+      const user = result.rows[0];
+      if (bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password))
+        return user;
+    }
+    return null;
   }
 }
 

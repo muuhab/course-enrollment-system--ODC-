@@ -26,7 +26,8 @@ class Categorystore {
   }
   async create(category) {
     try {
-      const sql = "INSERT INTO odc_categories (category_name) VALUES($1) RETURNING *";
+      const sql =
+        "INSERT INTO odc_categories (category_name) VALUES($1) RETURNING *";
       const conn = await client.connect();
       const result = await conn.query(sql, [category.category_name]);
       conn.release();
