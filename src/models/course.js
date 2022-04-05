@@ -44,7 +44,7 @@ class CourseStore {
   async update(course, id) {
     try {
       const sql =
-        "UPDATE odc_courses SET course_name=($1), course_level=($2), category_id=($3) where id=($4) RETURNING * ";
+        "UPDATE odc_courses SET course_name=COALESCE($1,course_name), course_level=COALESCE($2,course_level), category_id=COALESCE($3,category_id) where id=($4) RETURNING * ";
       const conn = await client.connect();
       const result = await conn.query(sql, [
         course.course_name,

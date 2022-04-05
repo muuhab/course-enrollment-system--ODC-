@@ -26,7 +26,7 @@ class TrainerStore {
   }
   async create(trainer) {
     try {
-      const sql = "INSERT INTO odc_trainers(course_id) VALUES($1) RETURNING *";
+      const sql = "INSERT INTO odc_trainers(name) VALUES($1) RETURNING *";
       const conn = await client.connect();
       const result = await conn.query(sql, [trainer.name]);
       conn.release();

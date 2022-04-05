@@ -1,7 +1,9 @@
 CREATE TABLE odc_students (
     id SERIAL PRIMARY KEY,
     student_name VARCHAR(55) NOT NULL,
+    username VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(50),
+    password VARCHAR(255),
     student_phone VARCHAR(55),
     student_address VARCHAR(100),
     college VARCHAR(44),

@@ -46,7 +46,7 @@ class RevisionStore {
   async update(revision, id) {
     try {
       const sql =
-        "UPDATE odc_revision SET student_degree=($1), total_right_degree=($2), total_wrong_degree=($3), exam_id=($4), student_id=($5) where id=($6) RETURNING * ";
+        "UPDATE odc_revision SET student_degree=COALESCE($1,student_degree), total_right_degree=COALESCE($2,total_right_degree), total_wrong_degree=COALESCE($3,total_wrong_degree), exam_id=COALESCE($4,exam_id), student_id=COALESCE($5,student_id) where id=($6) RETURNING * ";
       const conn = await client.connect();
       const result = await conn.query(sql, [
         revision.student_degree,

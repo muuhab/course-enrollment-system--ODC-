@@ -38,6 +38,7 @@ const create = async (req, res) => {
     res.json(`${error}`);
   }
 };
+
 const update = async (req, res) => {
   const student = {
     student_name: req.body.student_name,
@@ -66,6 +67,37 @@ const remove = async (req, res) => {
   }
 };
 
+const authenticate = async (req, res) => {
+  const student = {
+    username: req.body.username,
+    password: req.body.password,
+  };
+  try {
+    const authedStudent = await store.authenticate(
+      student.username,
+      student.password
+    );
+    if (authedStudent === null)
+      res.status(404).json({ message: "Invaild username or password" });
+    const token = jwt.sign({ authedStudent }, process.env.TOKEN_SERCRET, {
+      expiresIn: "30m",
+    });
+    res.json({ username: authedStudent.username, token });
+  } catch (error) {
+    res.status(404);
+    res.json(`${error}`);
+  }
+};
+
+const enroll = async (req, res) => {
+  try {
+    const newEnrollment = await store.enroll(req.params.id, req.body.course_id);
+    res.json(newEnrollment);
+  } catch (error) {
+    res.status(404);
+    res.json(`${error}`);
+  }
+};
 
 module.exports = {
   index,
@@ -73,4 +105,6 @@ module.exports = {
   create,
   update,
   remove,
+  authenticate,
+  enroll,
 };

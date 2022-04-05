@@ -3,5 +3,5 @@ CREATE TABLE odc_exams (
     create_at TIMESTAMP DEFAULT Now(),
     course_id INTEGER NOT NULL,
     FOREIGN KEY (course_id)
-      REFERENCES odc_courses (id) ON DELETE CASCADE 
+      REFERENCES odc_courses (id) 
 );

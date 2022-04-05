@@ -10,4 +10,4 @@ CREATE TABLE odc_admins (
 
 INSERT INTO odc_admins(username,
 email,
-password,image, role) VALUES('admin','admin@admin.com','$2b$10$8ENtjf6XrnE6BaZukqdn\uWAk7f.\x12kf8lIkU\ejk27fiyjzI6','asdjasjdsa.asdasdjasjd','admin');
+password,image, role) VALUES('admin','admin@admin.com','$2a$10$HU2ERdVDqrxqdQ6MbWMcWO2U5NNUYFe45QWSY9eiF1Cv1Vj4KEGmy','asdjasjdsa.asdasdjasjd','admin');

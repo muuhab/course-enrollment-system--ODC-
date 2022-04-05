@@ -13,7 +13,7 @@ const index = async (_req, res) => {
 
 const show = async (req, res) => {
   try {
-    const course = await store.show(req.params.id);
+    const course = await store.show(req.params.course_id);
     res.json(course);
   } catch (error) {
     res.status(404);
@@ -42,7 +42,7 @@ const update = async (req, res) => {
     category_id: req.body.category_id,
   };
   try {
-    const newcourse = await store.update(course, req.params.id);
+    const newcourse = await store.update(course, req.params.course_id);
     res.json(newcourse);
   } catch (error) {
     res.status(404);
@@ -52,7 +52,7 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
   try {
-    const course = await store.delete(req.params.id);
+    const course = await store.delete(req.params.course_id);
     res.json(course);
   } catch (error) {
     res.status(404);

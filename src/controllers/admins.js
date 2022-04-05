@@ -16,6 +16,7 @@ const index = async (_req, res) => {
 const show = async (req, res) => {
   try {
     const admin = await store.show(req.params.id);
+    if(admin===undefined) res.status(404).json({message: 'Admin not found'});
     res.json(admin);
   } catch (error) {
     res.status(404);
@@ -60,6 +61,7 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
   try {
     const admin = await store.delete(req.params.id);
+    if(admin===undefined) res.status(404).json({message: 'Admin not found'});
     res.json(admin);
   } catch (error) {
     res.status(404);
@@ -74,6 +76,7 @@ const authenticate = async (req, res) => {
   };
   try {
     const adminn = await store.authenticate(admin.username, admin.password);
+    if(adminn===null) res.status(404).json({message: 'Invaild username or password'})
     const token = jwt.sign({ adminn }, process.env.TOKEN_SERCRET, {
       expiresIn: "30m",
     });

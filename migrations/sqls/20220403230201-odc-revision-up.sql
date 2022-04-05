@@ -7,7 +7,7 @@ CREATE TABLE odc_revision(
     exam_id INTEGER NOT NULL,
     student_id INTEGER NOT NULL,
     FOREIGN KEY (exam_id)
-      REFERENCES odc_exams (id) ON DELETE CASCADE, 
+      REFERENCES odc_exams (id), 
     FOREIGN KEY (student_id)
-      REFERENCES odc_students (id) ON DELETE CASCADE 
+      REFERENCES odc_students (id) 
 );

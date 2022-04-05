@@ -44,7 +44,7 @@ class QuestionStore {
   async update(question, id) {
     try {
       const sql =
-        "UPDATE odc_questions SET question_content=($1), question_answer=($2), exam_id=($3) where id=($4) RETURNING * ";
+        "UPDATE odc_questions SET question_content=COALESCE($1,question_content), question_answer=COALESCE($2,question_answer), exam_id=COALESCE($3,exam_id) where id=($4) RETURNING * ";
       const conn = await client.connect();
       const result = await conn.query(sql, [
         question.question_content,

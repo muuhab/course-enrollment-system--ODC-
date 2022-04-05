@@ -40,7 +40,7 @@ class Categorystore {
   async update(category, id) {
     try {
       const sql =
-        "UPDATE odc_categories SET category_name=($1) where id=($2) RETURNING * ";
+        "UPDATE odc_categories SET category_name=COALESCE($1,category_name) where id=($2) RETURNING * ";
       const conn = await client.connect();
       const result = await conn.query(sql, [category.category_name, id]);
       conn.release();

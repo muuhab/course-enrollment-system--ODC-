@@ -1,9 +1,9 @@
 const ExamStore = require("../models/exam");
 const store = new ExamStore();
 
-const index = async (_req, res) => {
+const index = async (req, res) => {
   try {
-    const exam = await store.index();
+    const exam = await store.index(req.params.course_id);
     res.json(exam);
   } catch (error) {
     res.status(404);
@@ -12,8 +12,9 @@ const index = async (_req, res) => {
 };
 
 const show = async (req, res) => {
+
   try {
-    const exam = await store.show(req.params.id);
+    const exam = await store.show(req.params.exam_id,req.params.course_id);
     res.json(exam);
   } catch (error) {
     res.status(404);
@@ -22,23 +23,19 @@ const show = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const exam = {
-    course_id: req.body.course_id,
-  };
   try {
-    const newexam = await store.create(exam);
+    const newexam = await store.create(req.params.course_id);
     res.json(newexam);
   } catch (error) {
     res.status(404);
     res.json(`${error}`);
   }
 };
+
 const update = async (req, res) => {
-  const exam = {
-    course_id: req.body.course_id,
-  };
+
   try {
-    const newexam = await store.update(exam, req.params.id);
+    const newexam = await store.update(req.params.course_id, req.params.exam_id);
     res.json(newexam);
   } catch (error) {
     res.status(404);
@@ -48,7 +45,7 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
   try {
-    const exam = await store.delete(req.params.id);
+    const exam = await store.delete(req.params.exam_id);
     res.json(exam);
   } catch (error) {
     res.status(404);

@@ -5,5 +5,5 @@ CREATE TABLE odc_courses (
     created_at TIMESTAMP DEFAULT Now(),
     category_id INTEGER NOT NULL,
     FOREIGN KEY (category_id)
-      REFERENCES odc_categories (id) ON DELETE CASCADE
+      REFERENCES odc_categories (id)
 );

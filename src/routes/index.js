@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.use("/api/categories", categories);
 router.use("/api/courses", courses);
-router.use("/api/exams", exams);
+// router.use("/api/exams", exams);
 router.use("/api/questions", questions);
 router.use("/api/revisions", revisions);
 router.use("/api/students", students);
