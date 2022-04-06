@@ -2,7 +2,7 @@ const studentStore = require("../models/student");
 const store = new studentStore();
 const jwt = require("jsonwebtoken");
 
-const authUser = async (req, res, next) => {
+const authStudent = async (req, res, next) => {
   try {
     const student = await store.show(req.params.id);
     const authorizationHeader = req.headers.authorization;
@@ -21,4 +21,4 @@ const authUser = async (req, res, next) => {
   }
 };
 
-module.exports = authUser;
+module.exports = authStudent;

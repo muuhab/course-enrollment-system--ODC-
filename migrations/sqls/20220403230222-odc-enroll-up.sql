@@ -2,7 +2,6 @@ CREATE TABLE odc_enroll (
     id SERIAL PRIMARY KEY,
     student_id INTEGER NOT NULL,
     course_id INTEGER NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT FALSE,
     status VARCHAR(200) NOT NULL DEFAULT 'half-time',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES odc_students (id) ,

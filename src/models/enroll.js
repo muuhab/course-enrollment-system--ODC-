@@ -15,7 +15,7 @@ class EnrollStore {
 
   async show(id) {
     try {
-      const sql = "SELECT * FROM odc_enroll WHERE id=($1)";
+      const sql = "SELECT * FROM odc_enroll WHERE student_id=($1)";
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
@@ -43,12 +43,10 @@ class EnrollStore {
   async update(enroll, id) {
     try {
       const sql =
-        "UPDATE odc_enroll SET student_id=COALESCE($1,student_id) course_id=COALESCE($2,course_id) active=COALESCE($3,active) status=COALESCE($4,status) where id=($5) RETURNING * ";
+        "UPDATE odc_enroll SET course_id=COALESCE($1,course_id)  status=COALESCE($2,status) where student_id=($3) RETURNING * ";
       const conn = await client.connect();
       const result = await conn.query(sql, [
-        enroll.student_id,
         enroll.course_id,
-        enroll.active,
         enroll.status,
         id,
       ]);
@@ -60,7 +58,7 @@ class EnrollStore {
   }
   async delete(id) {
     try {
-      const sql = "DELETE FROM odc_enroll WHERE id=($1) RETURNING * ";
+      const sql = "DELETE FROM odc_enroll WHERE student_id=($1) RETURNING * ";
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();

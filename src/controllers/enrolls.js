@@ -36,9 +36,7 @@ const create = async (req, res) => {
 };
 const update = async (req, res) => {
   const enroll = {
-    student_id: req.body.student_id,
     course_id: req.body.course_id,
-    active: req.body.active,
     status: req.body.status,
   };
   try {
