@@ -1,5 +1,6 @@
 const StudentStore = require("../models/student");
 const store = new StudentStore();
+const jwt = require("jsonwebtoken");
 
 const index = async (_req, res) => {
   try {
@@ -29,6 +30,8 @@ const create = async (req, res) => {
     student_address: req.body.student_address,
     college: req.body.college,
     image: req.body.image,
+    username: req.body.username,
+    password: req.body.password
   };
   try {
     const newstudent = await store.create(student);
@@ -79,20 +82,14 @@ const authenticate = async (req, res) => {
     );
     if (authedStudent === null)
       res.status(404).json({ message: "Invaild username or password" });
-    const token = jwt.sign({ authedStudent }, process.env.TOKEN_SERCRET, {
-      expiresIn: "30m",
-    });
+    const token = jwt.sign(
+      { authedStudent },
+      process.env.TOKEN_SERCRET + authedStudent.username,
+      {
+        expiresIn: "30m",
+      }
+    );
     res.json({ username: authedStudent.username, token });
-  } catch (error) {
-    res.status(404);
-    res.json(`${error}`);
-  }
-};
-
-const enroll = async (req, res) => {
-  try {
-    const newEnrollment = await store.enroll(req.params.id, req.body.course_id);
-    res.json(newEnrollment);
   } catch (error) {
     res.status(404);
     res.json(`${error}`);
@@ -106,5 +103,4 @@ module.exports = {
   update,
   remove,
   authenticate,
-  enroll,
 };

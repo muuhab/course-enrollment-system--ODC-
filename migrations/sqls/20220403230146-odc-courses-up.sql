@@ -7,3 +7,5 @@ CREATE TABLE odc_courses (
     FOREIGN KEY (category_id)
       REFERENCES odc_categories (id)
 );
+
+INSERT INTO odc_courses ( course_name, course_level,category_id) VALUES ('asd','asd', (SELECT id FROM odc_categories LIMIT 1));

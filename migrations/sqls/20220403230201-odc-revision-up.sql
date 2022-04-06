@@ -11,3 +11,6 @@ CREATE TABLE odc_revision(
     FOREIGN KEY (student_id)
       REFERENCES odc_students (id) 
 );
+
+INSERT INTO odc_revision (student_degree, total_right_degree, total_wrong_degree, exam_id, student_id)
+VALUES (321,12,33,(SELECT id FROM odc_exams LIMIT 1),(SELECT id FROM odc_students LIMIT 1));

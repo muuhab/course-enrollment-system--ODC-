@@ -1,7 +1,7 @@
 const express = require("express");
 const categories = require("./categories");
 const courses = require("./courses");
-const exams = require("./exams");
+const enrolls = require("./enrolls");
 const questions = require("./questions");
 const revisions = require("./revisions");
 const students = require("./students");
@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.use("/api/categories", categories);
 router.use("/api/courses", courses);
-// router.use("/api/exams", exams);
+router.use("/api/enrolls", enrolls);
 router.use("/api/questions", questions);
 router.use("/api/revisions", revisions);
 router.use("/api/students", students);

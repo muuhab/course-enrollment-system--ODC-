@@ -3,3 +3,5 @@ CREATE TABLE odc_categories (
     category_name VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT Now()
 );
+
+INSERT INTO odc_categories (category_name) VALUES (1);

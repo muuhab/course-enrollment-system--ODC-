@@ -5,3 +5,5 @@ CREATE TABLE odc_exams (
     FOREIGN KEY (course_id)
       REFERENCES odc_courses (id) 
 );
+
+INSERT INTO odc_exams (course_id) VALUES ((SELECT id FROM odc_courses LIMIT 1));

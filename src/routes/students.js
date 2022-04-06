@@ -2,14 +2,16 @@ const express = require("express");
 const router = express.Router();
 
 const studentsController = require("../controllers/students");
+const enrollsController = require("../controllers/enrolls");
 const verifyAuthToken = require("../services/auth");
-const studentAuthVerify = require("../services/studentAuth");
+const authUser = require("../services/middleware");
 
 router.get("/", verifyAuthToken, studentsController.index);
-router.get("/:id",verifyAuthToken, studentsController.show);
+router.get("/:id", authUser,  studentsController.show);
 router.put("/:id", verifyAuthToken, studentsController.update);
 router.delete("/:id", verifyAuthToken, studentsController.remove);
-router.post("/", verifyAuthToken, studentsController.create);
-router.post("/:id/enroll", studentsController.enroll);
+router.post("/", authUser, studentsController.create);
+router.post("/auth", studentsController.authenticate);
+router.post("/:id/enroll", verifyAuthToken, enrollsController.create);
 
 module.exports = router;

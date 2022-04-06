@@ -1,4 +1,7 @@
 const client = require("../database");
+const bcrypt = require("bcrypt");
+
+const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env;
 
 class StudentStore {
   async index() {
@@ -27,8 +30,12 @@ class StudentStore {
   async create(student) {
     try {
       const sql =
-        "INSERT INTO odc_students(student_name, email, student_phone, student_address, college, image, username) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *";
+        "INSERT INTO odc_students(student_name, email, student_phone, student_address, college, image, username, password) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *";
       const conn = await client.connect();
+      const hash = bcrypt.hashSync(
+        student.password + BCRYPT_PASSWORD,
+        parseInt(SALT_ROUNDS)
+      );
       const result = await conn.query(sql, [
         student.student_name,
         student.email,
@@ -37,6 +44,7 @@ class StudentStore {
         student.college,
         student.image,
         student.username,
+        hash,
       ]);
       conn.release();
       return result.rows[0];
@@ -91,17 +99,6 @@ class StudentStore {
     return null;
   }
 
-  async enroll(student_id, course_id) {
-    try {
-      const sql = "INSERT INTO odc_enroll (student_id, course_id) VALUES ($1,$2) RETURNING * ";
-      const conn = await client.connect();
-      const result = await conn.query(sql, [student_id,course_id]);
-      conn.release();
-      return result.rows[0];
-    } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
-    }
-  }
 }
 
 module.exports = StudentStore;

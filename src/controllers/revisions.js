@@ -64,7 +64,6 @@ const remove = async (req, res) => {
   }
 };
 
-
 module.exports = {
   index,
   show,

@@ -99,6 +99,7 @@ class AdminStore {
     }
     return null;
   }
+  
 }
 
 module.exports = AdminStore;

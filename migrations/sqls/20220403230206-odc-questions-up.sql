@@ -6,3 +6,6 @@ CREATE TABLE odc_questions (
 FOREIGN KEY (exam_id)
       REFERENCES odc_exams (id) 
 );
+
+INSERT INTO odc_questions (question_content, question_answer, exam_id) 
+VALUES ('asdasd','asdasd',(SELECT id FROM odc_exams LIMIT 1));
