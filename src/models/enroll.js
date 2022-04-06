@@ -67,6 +67,21 @@ class EnrollStore {
       throw new Error(`Something Wrong ${error}`);
     }
   }
+
+  async genrateCode(code, id) {
+    try {
+      const sql =
+        "UPDATE odc_enroll SET code=($1), code_time=(to_timestamp($2/ 1000.0)) where student_id=($3) RETURNING * ";
+      const conn = await client.connect();
+      const result = await conn.query(sql, [code, Date.now(), id]);
+      console.log(result.rows)
+      conn.release();
+      return result.rows[0];
+    } catch (error) {
+      throw new Error(`Something Wrong ${error}`);
+    }
+  }
+  
 }
 
 module.exports = EnrollStore;

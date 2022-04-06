@@ -3,6 +3,8 @@ CREATE TABLE odc_enroll (
     student_id INTEGER NOT NULL,
     course_id INTEGER NOT NULL,
     status VARCHAR(200) NOT NULL DEFAULT 'half-time',
+    code VARCHAR(200),
+    code_time TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES odc_students (id) ,
     FOREIGN KEY (course_id) REFERENCES odc_courses (id) 

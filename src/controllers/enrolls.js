@@ -1,5 +1,6 @@
 const EnrollStore = require("../models/enroll");
 const store = new EnrollStore();
+const makeid = require("../services/helpers");
 
 const index = async (_req, res) => {
   try {
@@ -58,10 +59,22 @@ const remove = async (req, res) => {
   }
 };
 
+const genrateCode = async (req, res) => {
+  const code = makeid(5);
+  try {
+    const newenroll = await store.genrateCode(code, req.params.id);
+    res.json(newenroll);
+  } catch (error) {
+    res.status(404);
+    res.json(`${error}`);
+  }
+};
+
 module.exports = {
   index,
   show,
   create,
   update,
   remove,
+  genrateCode,
 };
