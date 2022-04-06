@@ -6,4 +6,11 @@ CREATE TABLE odc_exams (
       REFERENCES odc_courses (id) 
 );
 
-INSERT INTO odc_exams (course_id) VALUES ((SELECT id FROM odc_courses LIMIT 1));
+INSERT INTO odc_exams (course_id) VALUES ((SELECT id FROM odc_courses LIMIT 1))
+,((SELECT id FROM odc_courses ORDER BY random() LIMIT 1))
+,((SELECT id FROM odc_courses ORDER BY random() LIMIT 1))
+,((SELECT id FROM odc_courses ORDER BY random() LIMIT 1))
+,((SELECT id FROM odc_courses ORDER BY random() LIMIT 1))
+,((SELECT id FROM odc_courses ORDER BY random() LIMIT 1))
+,((SELECT id FROM odc_courses ORDER BY random() LIMIT 1))
+,((SELECT id FROM odc_courses ORDER BY random() LIMIT 1));

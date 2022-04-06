@@ -2,20 +2,32 @@ const StudentStore = require("../models/student");
 const EnrollStore = require("../models/enroll");
 const student_store = new StudentStore();
 const enroll_store = new EnrollStore();
+
 const jwt = require("jsonwebtoken");
 const { timeConverter } = require("./helpers");
 
-const authStudent = async (req, res, next) => {
+//admin role authenticate
+const verifyAuthToken = (role) => {
+  return (req, res, next) => {
+    try {
+      const authorizationHeader = req.headers.authorization;
+      const token = authorizationHeader.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.TOKEN_SERCRET + role);
+      next();
+    } catch (error) {
+      res.status(401);
+      res.json("Access denied, invalid token");
+      return;
+    }
+  };
+};
+
+//admins auth
+const authAdmins = (req, res, next) => {
   try {
-    const student = await student_store.show(req.params.id);
     const authorizationHeader = req.headers.authorization;
     const token = authorizationHeader.split(" ")[1];
-    jwt.verify(token, process.env.TOKEN_SERCRET, function (err, decoded) {
-      if (err) {
-        jwt.verify(token, process.env.TOKEN_SERCRET + student.username);
-      }
-    });
-
+    const decoded = jwt.verify(token, process.env.TOKEN_SERCRET + role);
     next();
   } catch (error) {
     res.status(401);
@@ -24,12 +36,41 @@ const authStudent = async (req, res, next) => {
   }
 };
 
+//single user auth and type of admin role who is in controle too !
+const authStudent = (admin = false, subadmin = false) => {
+  return async (req, res, next) => {
+    try {
+      const student = await student_store.show(req.params.id);
+      const authorizationHeader = req.headers.authorization;
+      const token = authorizationHeader.split(" ")[1];
+      jwt.verify(
+        token,
+        process.env.TOKEN_SERCRET + student.username,
+        function (err, decoded) {
+          if (err) {
+            admin && jwt.verify(token, process.env.TOKEN_SERCRET + "admin");
+            subadmin &&
+              jwt.verify(token, process.env.TOKEN_SERCRET + "sub-admin");
+          }
+        }
+      );
+
+      next();
+    } catch (error) {
+      res.status(401);
+      res.json("Access denied, invalid token");
+      return;
+    }
+  };
+};
+
+//check for the course code
 const verifyCode = async (req, res, next) => {
   const code = req.body.code;
   try {
     const enroll = await enroll_store.show(req.params.id);
     if (enroll.code !== code) throw new Error(error);
-    next()
+    next();
   } catch (error) {
     res.status(401);
     res.json("Access denied, invalid code");
@@ -37,6 +78,7 @@ const verifyCode = async (req, res, next) => {
   }
 };
 
+//check for the expiration date of the code before joining
 const checkExpires = async (req, res, next) => {
   try {
     const { code_time, expire_after } = await enroll_store.show(req.params.id);
@@ -51,4 +93,4 @@ const checkExpires = async (req, res, next) => {
   }
 };
 
-module.exports = { authStudent, verifyCode, checkExpires };
+module.exports = { authStudent, verifyCode, checkExpires, verifyAuthToken, authAdmins };

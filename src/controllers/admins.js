@@ -34,7 +34,7 @@ const create = async (req, res) => {
   };
   try {
     const newAdmin = await store.create(admin);
-    const token = jwt.sign({ user: newAdmin }, process.env.TOKEN_SERCRET);
+    const token = jwt.sign({ user: newAdmin }, process.env.TOKEN_SERCRET+admin.role);
     res.json({ username: admin.username, token: token });
   } catch (error) {
     res.status(404);
@@ -77,7 +77,7 @@ const authenticate = async (req, res) => {
   try {
     const adminn = await store.authenticate(admin.username, admin.password);
     if(adminn===null) res.status(404).json({message: 'Invaild username or password'})
-    const token = jwt.sign({ adminn }, process.env.TOKEN_SERCRET, {
+    const token = jwt.sign({ adminn }, process.env.TOKEN_SERCRET+adminn.role, {
       expiresIn: "30m",
     });
     res.json({ username: adminn.username, token });

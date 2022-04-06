@@ -81,7 +81,15 @@ const changeExpiresHours = async (req, res) => {
   }
 };
 
-
+const viewStatus = async (req, res) => {
+  try {
+    const enroll = await store.viewStatus(req.params.id);
+    res.json(enroll);
+  } catch (error) {
+    res.status(404);
+    res.json(error);
+  }
+};
 
 module.exports = {
   index,
@@ -91,4 +99,5 @@ module.exports = {
   remove,
   genrateCode,
   changeExpiresHours,
+  viewStatus
 };

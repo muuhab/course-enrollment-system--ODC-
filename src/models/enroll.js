@@ -106,6 +106,17 @@ class EnrollStore {
       throw new Error(`Something Wrong ${error}`);
     }
   }
+  async viewStatus (id){
+    try {
+      const sql = "SELECT status FROM odc_enroll WHERE student_id=($1)";
+      const conn = await client.connect();
+      const result = await conn.query(sql, [id]);
+      conn.release();
+      return result.rows[0];
+    } catch (error) {
+      throw new Error(`Something Wrong ${error}`);
+    }
+  }
 }
 
 module.exports = EnrollStore;

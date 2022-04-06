@@ -6,4 +6,15 @@ CREATE TABLE odc_teaching (
     FOREIGN KEY (trainer_id) REFERENCES odc_trainers (id) 
 );
 
-INSERT INTO odc_teaching (course_id,trainer_id) VALUES ((SELECT id FROM odc_courses LIMIT 1),(SELECT id FROM odc_trainers LIMIT 1));
+INSERT INTO odc_teaching (course_id,trainer_id) VALUES ((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_courses ORDER BY random() LIMIT 1),(SELECT id FROM odc_trainers ORDER BY random() LIMIT 1))
+;

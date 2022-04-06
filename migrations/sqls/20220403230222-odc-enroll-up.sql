@@ -11,4 +11,12 @@ CREATE TABLE odc_enroll (
     FOREIGN KEY (course_id) REFERENCES odc_courses (id) 
 );
 
-INSERT INTO odc_enroll (student_id, course_id) VALUES ((SELECT id FROM odc_students LIMIT 1),(SELECT id FROM odc_courses LIMIT 1))
+INSERT INTO odc_enroll (student_id, course_id) VALUES ((SELECT id FROM odc_students LIMIT 1),(SELECT id FROM odc_courses LIMIT 1)),
+((SELECT id FROM odc_students ORDER BY random() LIMIT 1),(SELECT id FROM odc_courses ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_students ORDER BY random() LIMIT 1),(SELECT id FROM odc_courses ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_students ORDER BY random() LIMIT 1),(SELECT id FROM odc_courses ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_students ORDER BY random() LIMIT 1),(SELECT id FROM odc_courses ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_students ORDER BY random() LIMIT 1),(SELECT id FROM odc_courses ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_students ORDER BY random() LIMIT 1),(SELECT id FROM odc_courses ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_students ORDER BY random() LIMIT 1),(SELECT id FROM odc_courses ORDER BY random() LIMIT 1)),
+((SELECT id FROM odc_students ORDER BY random() LIMIT 1),(SELECT id FROM odc_courses ORDER BY random() LIMIT 1));

@@ -13,4 +13,9 @@ CREATE TABLE odc_revision(
 );
 
 INSERT INTO odc_revision (student_degree, total_right_degree, total_wrong_degree, exam_id, student_id)
-VALUES (321,12,33,(SELECT id FROM odc_exams LIMIT 1),(SELECT id FROM odc_students LIMIT 1));
+VALUES (110,12,33,(SELECT id FROM odc_exams LIMIT 1),(SELECT id FROM odc_students LIMIT 1))
+,(110,12,33,(SELECT id FROM odc_exams ORDER BY random() LIMIT 1),(SELECT id FROM odc_students ORDER BY random() LIMIT 1))
+,(321,12,33,(SELECT id FROM odc_exams ORDER BY random() LIMIT 1),(SELECT id FROM odc_students ORDER BY random() LIMIT 1))
+,(321,12,33,(SELECT id FROM odc_exams ORDER BY random() LIMIT 1),(SELECT id FROM odc_students ORDER BY random() LIMIT 1))
+,(321,12,33,(SELECT id FROM odc_exams ORDER BY random() LIMIT 1),(SELECT id FROM odc_students ORDER BY random() LIMIT 1))
+,(321,12,33,(SELECT id FROM odc_exams ORDER BY random() LIMIT 1),(SELECT id FROM odc_students ORDER BY random() LIMIT 1));

@@ -4,4 +4,4 @@ CREATE TABLE odc_categories (
     created_at TIMESTAMP DEFAULT Now()
 );
 
-INSERT INTO odc_categories (category_name) VALUES (1);
+INSERT INTO odc_categories (category_name) VALUES ('Programming'),('Data Science'),('IT');

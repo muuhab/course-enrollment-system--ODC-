@@ -11,7 +11,7 @@ function makeid(length) {
 
 function timeConverter(UNIX_timestamp) {
   var a = new Date(UNIX_timestamp);
-  var hour = a.getHours()-2;
+  var hour = a.getHours() - 2;
   return hour;
 }
 

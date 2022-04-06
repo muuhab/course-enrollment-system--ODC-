@@ -8,4 +8,15 @@ FOREIGN KEY (exam_id)
 );
 
 INSERT INTO odc_questions (question_content, question_answer, exam_id) 
-VALUES ('asdasd','asdasd',(SELECT id FROM odc_exams LIMIT 1));
+VALUES ('content1','answer1',(SELECT id FROM odc_exams LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1))
+,('content1','answer1',(SELECT id FROM odc_exams ORDER BY random() LIMIT 1));

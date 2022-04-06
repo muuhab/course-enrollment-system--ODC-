@@ -4,4 +4,4 @@ CREATE TABLE odc_trainers (
     created_at TIMESTAMP DEFAULT Now()
 );
 
-INSERT INTO odc_trainers (name) VALUES('trainer1');
+INSERT INTO odc_trainers (name) VALUES('trainer2'),('trainer3'),('trainer4'),('trainer5');

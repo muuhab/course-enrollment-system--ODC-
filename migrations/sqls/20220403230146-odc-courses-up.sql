@@ -8,4 +8,9 @@ CREATE TABLE odc_courses (
       REFERENCES odc_categories (id)
 );
 
-INSERT INTO odc_courses ( course_name, course_level,category_id) VALUES ('asd','asd', (SELECT id FROM odc_categories LIMIT 1));
+INSERT INTO odc_courses ( course_name, course_level,category_id) VALUES ('CS10','first', (SELECT id FROM odc_categories LIMIT 1))
+,('CS20','last', (SELECT id FROM odc_categories ORDER BY random() LIMIT 1))
+,('CS30','first', (SELECT id FROM odc_categories ORDER BY random() LIMIT 1))
+,('CS40','mid', (SELECT id FROM odc_categories ORDER BY random() LIMIT 1))
+,('CS50','mid', (SELECT id FROM odc_categories ORDER BY random() LIMIT 1))
+,('CS60','first', (SELECT id FROM odc_categories ORDER BY random() LIMIT 1))
