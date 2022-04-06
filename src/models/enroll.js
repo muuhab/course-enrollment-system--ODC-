@@ -74,14 +74,38 @@ class EnrollStore {
         "UPDATE odc_enroll SET code=($1), code_time=(to_timestamp($2/ 1000.0)) where student_id=($3) RETURNING * ";
       const conn = await client.connect();
       const result = await conn.query(sql, [code, Date.now(), id]);
-      console.log(result.rows)
       conn.release();
       return result.rows[0];
     } catch (error) {
       throw new Error(`Something Wrong ${error}`);
     }
   }
-  
+
+  async removeCode(id) {
+    try {
+      const sql =
+        "UPDATE odc_enroll SET code=(null) , code_time=null where student_id=($1) RETURNING * ";
+      const conn = await client.connect();
+      const result = await conn.query(sql, [id]);
+      conn.release();
+      return result.rows[0];
+    } catch (error) {
+      throw new Error(`Something Wrong ${error}`);
+    }
+  }
+
+  async changeExpiresHours(id, hours) {
+    try {
+      const sql =
+        "UPDATE odc_enroll SET expire_after=($1) where student_id=($1) RETURNING * ";
+      const conn = await client.connect();
+      const result = await conn.query(sql, [hours, id]);
+      conn.release();
+      return result.rows[0];
+    } catch (error) {
+      throw new Error(`Something Wrong ${error}`);
+    }
+  }
 }
 
 module.exports = EnrollStore;

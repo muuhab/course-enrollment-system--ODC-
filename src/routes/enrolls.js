@@ -9,7 +9,7 @@ router.get("/:id", verifyAuthToken, enrollsController.show);
 router.put("/:id", verifyAuthToken, enrollsController.update);
 router.delete("/:id", verifyAuthToken, enrollsController.remove);
 router.post("/", verifyAuthToken, enrollsController.create);
-router.put("/:id/genrate_code", verifyAuthToken, enrollsController.genrateCode);
+router.put("/", verifyAuthToken, enrollsController.changeExpiresHours);
 
 
 module.exports = router;

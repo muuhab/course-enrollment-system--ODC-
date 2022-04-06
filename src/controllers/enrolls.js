@@ -1,6 +1,6 @@
 const EnrollStore = require("../models/enroll");
 const store = new EnrollStore();
-const makeid = require("../services/helpers");
+const { makeid } = require("../services/helpers");
 
 const index = async (_req, res) => {
   try {
@@ -70,6 +70,19 @@ const genrateCode = async (req, res) => {
   }
 };
 
+const changeExpiresHours = async (req, res) => {
+  const hours = req.params.hours;
+  try {
+    const newenroll = await store.changeExpiresHours(req.params.id, hours);
+    res.json(newenroll);
+  } catch (error) {
+    res.status(404);
+    res.json(`${error}`);
+  }
+};
+
+
+
 module.exports = {
   index,
   show,
@@ -77,4 +90,5 @@ module.exports = {
   update,
   remove,
   genrateCode,
+  changeExpiresHours,
 };
