@@ -4,9 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const routes = require("./routes/index");
-// const fake= require("./faker/index")
 
-// fake()
 const app = express();
 
 const PORT = process.env.PORT || 3000;
