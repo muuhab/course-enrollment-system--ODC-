@@ -8,17 +8,17 @@ const index = async (_req, res) => {
     res.json(enrolls);
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const show = async (req, res) => {
   try {
     const enroll = await store.show(req.params.id);
-    res.json(enroll);
+    res.status(200).json(successRes(200, enroll));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -29,10 +29,10 @@ const create = async (req, res) => {
   };
   try {
     const newenroll = await store.create(enroll);
-    res.json(newenroll);
+    res.status(201).json(successRes(201, newenroll));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 const update = async (req, res) => {
@@ -42,20 +42,20 @@ const update = async (req, res) => {
   };
   try {
     const newenroll = await store.update(enroll, req.params.id);
-    res.json(newenroll);
+    res.status(200).json(successRes(200, newenroll));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
     const enroll = await store.delete(req.params.id);
-    res.json(enroll);
+    res.status(200).json(successRes(200, enroll));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -63,10 +63,10 @@ const genrateCode = async (req, res) => {
   const code = makeid(5);
   try {
     const newenroll = await store.genrateCode(code, req.params.id);
-    res.json(newenroll);
+    res.status(200).json(successRes(200, newenroll));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -74,20 +74,20 @@ const changeExpiresHours = async (req, res) => {
   const hours = req.params.hours;
   try {
     const newenroll = await store.changeExpiresHours(req.params.id, hours);
-    res.json(newenroll);
+    res.status(200).json(successRes(200, newenroll));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const viewStatus = async (req, res) => {
   try {
     const enroll = await store.viewStatus(req.params.id);
-    res.json(enroll);
+    res.status(200).json(successRes(200, enroll));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -99,5 +99,5 @@ module.exports = {
   remove,
   genrateCode,
   changeExpiresHours,
-  viewStatus
+  viewStatus,
 };

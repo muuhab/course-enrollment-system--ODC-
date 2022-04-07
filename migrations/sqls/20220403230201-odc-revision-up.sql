@@ -7,9 +7,9 @@ CREATE TABLE odc_revision(
     exam_id INTEGER NOT NULL,
     student_id INTEGER NOT NULL,
     FOREIGN KEY (exam_id)
-      REFERENCES odc_exams (id), 
-    FOREIGN KEY (student_id)
-      REFERENCES odc_students (id) 
+      REFERENCES odc_exams (id) ON DELETE CASCADE, 
+    FOREIGN KEY (student_id) 
+      REFERENCES odc_students (id) ON DELETE CASCADE
 );
 
 INSERT INTO odc_revision (student_degree, total_right_degree, total_wrong_degree, exam_id, student_id)

@@ -3,7 +3,7 @@ CREATE TABLE odc_exams (
     create_at TIMESTAMP DEFAULT Now(),
     course_id INTEGER NOT NULL,
     FOREIGN KEY (course_id)
-      REFERENCES odc_courses (id) 
+      REFERENCES odc_courses (id) ON DELETE CASCADE
 );
 
 INSERT INTO odc_exams (course_id) VALUES ((SELECT id FROM odc_courses LIMIT 1))

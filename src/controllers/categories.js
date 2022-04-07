@@ -1,23 +1,24 @@
 const CategoryStore = require("../models/category");
 const store = new CategoryStore();
+const { successRes, errorRes } = require("../services/response");
 
 const index = async (_req, res) => {
   try {
     const course = await store.index();
-    res.json(course);
+    res.status(200).json(successRes(200, course));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const show = async (req, res) => {
   try {
     const course = await store.show(req.params.id);
-    res.json(course);
+    res.status(200).json(successRes(200, course));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -27,10 +28,10 @@ const create = async (req, res) => {
   };
   try {
     const newcourse = await store.create(course);
-    res.json(newcourse);
+    res.status(201).json(successRes(201, newcourse));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 const update = async (req, res) => {
@@ -39,20 +40,20 @@ const update = async (req, res) => {
   };
   try {
     const newcourse = await store.update(course, req.params.id);
-    res.json(newcourse);
+    res.status(200).json(successRes(200, newcourse));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
     const course = await store.delete(req.params.id);
-    res.json(course);
+    res.status(200).json(successRes(200, course));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 

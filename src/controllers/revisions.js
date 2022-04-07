@@ -4,20 +4,20 @@ const store = new RevisionStore();
 const index = async (_req, res) => {
   try {
     const revision = await store.index();
-    res.json(revision);
+    res.status(200).json(successRes(200, revision));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const show = async (req, res) => {
   try {
     const revision = await store.show(req.params.id);
-    res.json(revision);
+    res.status(200).json(successRes(200, revision));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -31,10 +31,10 @@ const create = async (req, res) => {
   };
   try {
     const newrevision = await store.create(revision);
-    res.json(newrevision);
+    res.status(201).json(successRes(201, newrevision));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 const update = async (req, res) => {
@@ -47,20 +47,20 @@ const update = async (req, res) => {
   };
   try {
     const newrevision = await store.update(revision, req.params.id);
-    res.json(newrevision);
+    res.status(200).json(successRes(200, newrevision));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
     const revision = await store.delete(req.params.id);
-    res.json(revision);
+    res.status(200).json(successRes(200, revision));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 

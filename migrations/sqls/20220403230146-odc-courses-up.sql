@@ -5,7 +5,7 @@ CREATE TABLE odc_courses (
     created_at TIMESTAMP DEFAULT Now(),
     category_id INTEGER NOT NULL,
     FOREIGN KEY (category_id)
-      REFERENCES odc_categories (id)
+      REFERENCES odc_categories (id) ON DELETE CASCADE
 );
 
 INSERT INTO odc_courses ( course_name, course_level,category_id) VALUES ('CS10','first', (SELECT id FROM odc_categories LIMIT 1))

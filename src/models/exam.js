@@ -5,23 +5,23 @@ class ExamStore {
     try {
       const sql = "SELECT * FROM odc_exams WHERE course_id=($1)";
       const conn = await client.connect();
-      const result = await conn.query(sql,[course_id]);
+      const result = await conn.query(sql, [course_id]);
       conn.release();
       return result.rows;
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 
-  async show(id,course_id) {
+  async show(id, course_id) {
     try {
       const sql = "SELECT * FROM odc_exams WHERE id=($1) AND course_id=($2)";
       const conn = await client.connect();
-      const result = await conn.query(sql, [id,course_id]);
-      conn.release(); 
+      const result = await conn.query(sql, [id, course_id]);
+      conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
   async create(course_id) {
@@ -32,7 +32,12 @@ class ExamStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      if (error.code === "23505")
+        throw new Error(
+          `${stringBetweenParentheses(error.detail)} already exists`
+        );
+      if (error.code === "23502") throw new Error(`${error.column} is null`);
+      throw new Error(error.message);
     }
   }
 
@@ -45,7 +50,12 @@ class ExamStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      if (error.code === "23505")
+        throw new Error(
+          `${stringBetweenParentheses(error.detail)} already exists`
+        );
+      if (error.code === "23502") throw new Error(`${error.column} is null`);
+      throw new Error(error.message);
     }
   }
   async delete(id) {
@@ -56,7 +66,7 @@ class ExamStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 }

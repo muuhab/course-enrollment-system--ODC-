@@ -9,7 +9,7 @@ class EnrollStore {
       conn.release();
       return result.rows;
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 
@@ -21,7 +21,7 @@ class EnrollStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
   async create(enroll) {
@@ -36,7 +36,12 @@ class EnrollStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      if (error.code === "23505")
+        throw new Error(
+          `${stringBetweenParentheses(error.detail)} already exists`
+        );
+      if (error.code === "23502") throw new Error(`${error.column} is null`);
+      throw new Error(error.message);
     }
   }
 
@@ -53,7 +58,12 @@ class EnrollStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      if (error.code === "23505")
+        throw new Error(
+          `${stringBetweenParentheses(error.detail)} already exists`
+        );
+      if (error.code === "23502") throw new Error(`${error.column} is null`);
+      throw new Error(error.message);
     }
   }
   async delete(id) {
@@ -64,7 +74,7 @@ class EnrollStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 
@@ -77,7 +87,7 @@ class EnrollStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 
@@ -90,7 +100,7 @@ class EnrollStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 
@@ -106,7 +116,7 @@ class EnrollStore {
       throw new Error(`Something Wrong ${error}`);
     }
   }
-  async viewStatus (id){
+  async viewStatus(id) {
     try {
       const sql = "SELECT status FROM odc_enroll WHERE student_id=($1)";
       const conn = await client.connect();

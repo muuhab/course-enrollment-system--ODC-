@@ -9,7 +9,7 @@ class RevisionStore {
       conn.release();
       return result.rows;
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 
@@ -21,7 +21,7 @@ class RevisionStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
   async create(revision) {
@@ -39,7 +39,12 @@ class RevisionStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      if (error.code === "23505")
+        throw new Error(
+          `${stringBetweenParentheses(error.detail)} already exists`
+        );
+      if (error.code === "23502") throw new Error(`${error.column} is null`);
+      throw new Error(error.message);
     }
   }
 
@@ -59,7 +64,12 @@ class RevisionStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      if (error.code === "23505")
+        throw new Error(
+          `${stringBetweenParentheses(error.detail)} already exists`
+        );
+      if (error.code === "23502") throw new Error(`${error.column} is null`);
+      throw new Error(error.message);
     }
   }
   async delete(id) {
@@ -70,7 +80,7 @@ class RevisionStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 }

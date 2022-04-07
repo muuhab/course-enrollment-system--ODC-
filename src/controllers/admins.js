@@ -1,26 +1,28 @@
 const AdminStore = require("../models/admin");
 const jwt = require("jsonwebtoken");
+const { successRes, errorRes } = require("../services/response");
 
 const store = new AdminStore();
 
 const index = async (_req, res) => {
   try {
     const admins = await store.index();
-    res.json(admins);
+    res.status(200).json(successRes(200,admins));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const show = async (req, res) => {
   try {
     const admin = await store.show(req.params.id);
-    if(admin===undefined) res.status(404).json({message: 'Admin not found'});
-    res.json(admin);
+    if (admin === undefined)
+      res.status(404).json(errorRes(404, "Admin not found"));
+    res.status(200).json(successRes(200, admin));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -34,11 +36,16 @@ const create = async (req, res) => {
   };
   try {
     const newAdmin = await store.create(admin);
-    const token = jwt.sign({ user: newAdmin }, process.env.TOKEN_SERCRET+admin.role);
-    res.json({ username: admin.username, token: token });
+    const token = jwt.sign(
+      { user: newAdmin },
+      process.env.TOKEN_SERCRET + admin.role
+    );
+    res
+      .status(201)
+      .json(successRes(201, { username: admin.username, token: token }));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 const update = async (req, res) => {
@@ -51,21 +58,22 @@ const update = async (req, res) => {
   };
   try {
     const adminn = await store.update(admin, req.params.id);
-    res.json(adminn);
+    res.json(successRes(200, adminn));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
     const admin = await store.delete(req.params.id);
-    if(admin===undefined) res.status(404).json({message: 'Admin not found'});
+    if (admin === undefined)
+      res.status(404).json(errorRes(404, "Admin not found"));
     res.json(admin);
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -76,14 +84,22 @@ const authenticate = async (req, res) => {
   };
   try {
     const adminn = await store.authenticate(admin.username, admin.password);
-    if(adminn===null) res.status(404).json({message: 'Invaild username or password'})
-    const token = jwt.sign({ adminn }, process.env.TOKEN_SERCRET+adminn.role, {
-      expiresIn: "30m",
-    });
-    res.json({ username: adminn.username, token });
+    if (adminn === null)
+      res.status(404).json({ message: "Invaild username or password" });
+    else {
+      const token = jwt.sign(
+        { adminn },
+        process.env.TOKEN_SERCRET + adminn.role
+        // ,
+        // {
+        //   expiresIn: "30m",
+        // }
+      );
+      res.json(successRes(200, { username: adminn.username, token }));
+    }
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 

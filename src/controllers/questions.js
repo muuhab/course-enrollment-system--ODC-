@@ -4,20 +4,20 @@ const store = new QuestionStore();
 const index = async (_req, res) => {
   try {
     const question = await store.index();
-    res.json(question);
+    res.status(200).json(successRes(200, question));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const show = async (req, res) => {
   try {
     const question = await store.show(req.params.id);
-    res.json(question);
+    res.status(200).json(successRes(200, question));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -29,7 +29,7 @@ const create = async (req, res) => {
   };
   try {
     const newquestion = await store.create(question);
-    res.json(newquestion);
+    res.status(201).json(successRes(201, newquestion));
   } catch (error) {
     res.status(404);
     res.json(`${error}`);
@@ -43,7 +43,7 @@ const update = async (req, res) => {
   };
   try {
     const newquestion = await store.update(question, req.params.id);
-    res.json(newquestion);
+    res.status(200).json(successRes(200, newquestion));
   } catch (error) {
     res.status(404);
     res.json(`${error}`);
@@ -53,13 +53,12 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
   try {
     const question = await store.delete(req.params.id);
-    res.json(question);
+    res.status(200).json(successRes(200, question));
   } catch (error) {
     res.status(404);
     res.json(`${error}`);
   }
 };
-
 
 module.exports = {
   index,

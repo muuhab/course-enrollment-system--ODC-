@@ -4,7 +4,7 @@ CREATE TABLE odc_questions (
     question_answer VARCHAR(250),
     exam_id INTEGER NOT NULL,
 FOREIGN KEY (exam_id)
-      REFERENCES odc_exams (id) 
+      REFERENCES odc_exams (id) ON DELETE CASCADE
 );
 
 INSERT INTO odc_questions (question_content, question_answer, exam_id) 

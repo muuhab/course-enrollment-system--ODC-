@@ -5,20 +5,20 @@ const jwt = require("jsonwebtoken");
 const index = async (_req, res) => {
   try {
     const student = await store.index();
-    res.json(student);
+    res.status(200).json(successRes(200,student));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const show = async (req, res) => {
   try {
     const student = await store.show(req.params.id);
-    res.json(student);
+    res.status(200).json(successRes(200,student));
   } catch (error) {
     res.status(404);
-    res.json(error);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -35,10 +35,10 @@ const create = async (req, res) => {
   };
   try {
     const newstudent = await store.create(student);
-    res.json(newstudent);
+    res.status(201).json(successRes(201,newstudent));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -53,20 +53,20 @@ const update = async (req, res) => {
   };
   try {
     const newstudent = await store.update(student, req.params.id);
-    res.json(newstudent);
+    res.status(200).json(successRes(200,newstudent));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
     const student = await store.delete(req.params.id);
-    res.json(student);
+    res.status(200).json(successRes(200,student));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -92,7 +92,7 @@ const authenticate = async (req, res) => {
     res.json({ username: authedStudent.username, token });
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 

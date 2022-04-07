@@ -1,5 +1,6 @@
 const client = require("../database");
 const bcrypt = require("bcrypt");
+const { stringBetweenParentheses } = require("../services/helpers");
 
 const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env;
 
@@ -12,7 +13,7 @@ class AdminStore {
       conn.release();
       return result.rows;
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 
@@ -24,7 +25,7 @@ class AdminStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
   async create(admin) {
@@ -47,7 +48,13 @@ class AdminStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      if (error.code === "23505")
+        throw new Error(
+          `${stringBetweenParentheses(error.detail)} already exists`
+        );
+      if (error.code === "23502") throw new Error(`${error.column} is null`);
+
+      throw new Error(error.message);
     }
   }
 
@@ -56,7 +63,6 @@ class AdminStore {
       const sql =
         "UPDATE odc_admins SET role=COALESCE($1,role), username=COALESCE($2,username), email=COALESCE($3,email), password=COALESCE($4,password), image=COALESCE($5,image) where id=($6) RETURNING * ";
       const conn = await client.connect();
-      console.log('asd')
       const hash = bcrypt.hashSync(
         admin.password + BCRYPT_PASSWORD,
         parseInt(SALT_ROUNDS)
@@ -72,7 +78,12 @@ class AdminStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      if (error.code === "23505")
+        throw new Error(
+          `${stringBetweenParentheses(error.detail)} already exists`
+        );
+      if (error.code === "23502") throw new Error(`${error.column} is null`);
+      throw new Error(error.message);
     }
   }
   async delete(id) {
@@ -83,23 +94,27 @@ class AdminStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 
   async authenticate(username, password) {
-    const sql = "SELECT * FROM odc_admins WHERE username=($1) ";
-    const conn = await client.connect();
-    const result = await conn.query(sql, [username]);
-    conn.release();
-    if (result.rows.length) {
-      const user = result.rows[0];
-      if (bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password))
-        return user;
+    try {
+      const sql = "SELECT * FROM odc_admins WHERE username=($1) ";
+      const conn = await client.connect();
+      const result = await conn.query(sql, [username]);
+      conn.release();
+      if (result.rows.length) {
+        const user = result.rows[0];
+        if (bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password))
+          return user;
+        else throw new Error("password is not correct");
+      }
+      throw new Error("username not found");
+    } catch (error) {
+      throw new Error(error.message);
     }
-    return null;
   }
-  
 }
 
 module.exports = AdminStore;

@@ -2,6 +2,7 @@ const StudentStore = require("../models/student");
 const EnrollStore = require("../models/enroll");
 const student_store = new StudentStore();
 const enroll_store = new EnrollStore();
+const {errorRes} = require("../services/response")
 
 const jwt = require("jsonwebtoken");
 const { timeConverter } = require("./helpers");
@@ -16,7 +17,7 @@ const verifyAuthToken = (role) => {
       next();
     } catch (error) {
       res.status(401);
-      res.json("Access denied, invalid token");
+      res.json(errorRes(401,"Access denied, invalid token"));
       return;
     }
   };
@@ -31,7 +32,7 @@ const authAdmins = (req, res, next) => {
     next();
   } catch (error) {
     res.status(401);
-    res.json("Access denied, invalid token");
+    res.json(errorRes(401,"Access denied, invalid token"));
     return;
   }
 };
@@ -58,7 +59,7 @@ const authStudent = (admin = false, subadmin = false) => {
       next();
     } catch (error) {
       res.status(401);
-      res.json("Access denied, invalid token");
+      res.json(errorRes(401,"Access denied, invalid token"));
       return;
     }
   };
@@ -69,11 +70,11 @@ const verifyCode = async (req, res, next) => {
   const code = req.body.code;
   try {
     const enroll = await enroll_store.show(req.params.id);
-    if (enroll.code !== code) throw new Error(error);
+    if (enroll.code !== code) throw new Error();
     next();
   } catch (error) {
-    res.status(401);
-    res.json("Access denied, invalid code");
+    res.status(404);
+    res.json(errorRes(404,"Code is invaild"));
     return;
   }
 };
@@ -88,7 +89,7 @@ const checkExpires = async (req, res, next) => {
     } else next();
   } catch (error) {
     res.status(404);
-    res.json("Code expired, please try again");
+    res.json(errorRes(404,"Code expired, please try again"));
     return;
   }
 };

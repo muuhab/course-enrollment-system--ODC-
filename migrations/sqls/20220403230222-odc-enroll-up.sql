@@ -7,8 +7,8 @@ CREATE TABLE odc_enroll (
     code_time TIMESTAMP,
     expire_after INTEGER DEFAULT 24,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (student_id) REFERENCES odc_students (id) ,
-    FOREIGN KEY (course_id) REFERENCES odc_courses (id) 
+    FOREIGN KEY (student_id) REFERENCES odc_students (id) ON DELETE CASCADE ,
+    FOREIGN KEY (course_id) REFERENCES odc_courses (id) ON DELETE CASCADE 
 );
 
 INSERT INTO odc_enroll (student_id, course_id) VALUES ((SELECT id FROM odc_students LIMIT 1),(SELECT id FROM odc_courses LIMIT 1)),
