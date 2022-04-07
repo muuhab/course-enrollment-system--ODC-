@@ -1,9 +1,10 @@
 const client = require("../database");
+const { stringBetweenParentheses } = require("../services/helpers");
 
 class ExamStore {
   async index(course_id) {
     try {
-      const sql = "SELECT * FROM odc_exams WHERE course_id=($1)";
+      const sql = "SELECT * FROM odc_exams WHERE course_id=($1) ORDER BY random() LIMIT 1";
       const conn = await client.connect();
       const result = await conn.query(sql, [course_id]);
       conn.release();

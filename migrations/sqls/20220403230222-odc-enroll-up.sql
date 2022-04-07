@@ -2,7 +2,7 @@ CREATE TABLE odc_enroll (
     id SERIAL PRIMARY KEY,
     student_id INTEGER NOT NULL,
     course_id INTEGER NOT NULL,
-    status VARCHAR(200) NOT NULL DEFAULT 'half-time',
+    status VARCHAR(200) NOT NULL DEFAULT 'half-time' CHECK (status IN ('half-time','passed','fail')),
     code VARCHAR(200),
     code_time TIMESTAMP,
     expire_after INTEGER DEFAULT 24,

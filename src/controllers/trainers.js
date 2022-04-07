@@ -26,6 +26,7 @@ const create = async (req, res) => {
     name: req.body.name,
   };
   try {
+    if (!trainer.name) throw new Error("trainer name is missing");
     const newtrainer = await store.create(trainer);
     res.status(201).json(successRes(201,newtrainer));
   } catch (error) {

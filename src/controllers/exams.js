@@ -1,4 +1,5 @@
 const ExamStore = require("../models/exam");
+const { errorRes, successRes } = require("../services/response");
 const store = new ExamStore();
 
 const index = async (req, res) => {

@@ -53,7 +53,7 @@ class AdminStore {
           `${stringBetweenParentheses(error.detail)} already exists`
         );
       if (error.code === "23502") throw new Error(`${error.column} is null`);
-
+          
       throw new Error(error.message);
     }
   }

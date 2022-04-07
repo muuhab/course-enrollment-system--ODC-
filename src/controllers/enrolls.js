@@ -1,11 +1,12 @@
 const EnrollStore = require("../models/enroll");
 const store = new EnrollStore();
 const { makeid } = require("../services/helpers");
+const { errorRes, successRes } = require("../services/response");
 
 const index = async (_req, res) => {
   try {
     const enrolls = await store.index();
-    res.json(enrolls);
+    res.status(200).json(successRes(200, enrolls));
   } catch (error) {
     res.status(404);
     res.json(errorRes(404, error.message));
@@ -28,6 +29,9 @@ const create = async (req, res) => {
     course_id: req.body.course_id,
   };
   try {
+    if (!enroll.student_id) throw new Error("student id is missing");
+    if (!enroll.course_id) throw new Error("course id is missing");
+
     const newenroll = await store.create(enroll);
     res.status(201).json(successRes(201, newenroll));
   } catch (error) {
@@ -73,6 +77,7 @@ const genrateCode = async (req, res) => {
 const changeExpiresHours = async (req, res) => {
   const hours = req.params.hours;
   try {
+    if(hours<=0 && !hours) throw new Error("number of hours is missing");
     const newenroll = await store.changeExpiresHours(req.params.id, hours);
     res.status(200).json(successRes(200, newenroll));
   } catch (error) {

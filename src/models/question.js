@@ -1,4 +1,5 @@
 const client = require("../database");
+const { stringBetweenParentheses } = require("../services/helpers");
 
 class QuestionStore {
   async index() {

@@ -1,4 +1,5 @@
 const CourseStore = require("../models/course");
+const { successRes, errorRes } = require("../services/response");
 const store = new CourseStore();
 
 const index = async (_req, res) => {
@@ -28,6 +29,10 @@ const create = async (req, res) => {
     category_id: req.body.category_id,
   };
   try {
+    if (!course.course_name) throw new Error("course name is missing");
+    if (!course.course_level) throw new Error("course level is missing");
+    if (!course.category_id) throw new Error("category id is missing");
+    
     const newcourse = await store.create(course);
     res.status(201).json(successRes(201, newcourse));
   } catch (error) {

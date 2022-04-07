@@ -1,4 +1,5 @@
 const RevisionStore = require("../models/revision");
+const { errorRes, successRes } = require("../services/response");
 const store = new RevisionStore();
 
 const index = async (_req, res) => {
@@ -30,6 +31,7 @@ const create = async (req, res) => {
     student_id: req.body.student_id,
   };
   try {
+    // if (!admin.student_degree) throw new Error("email address is missing");
     const newrevision = await store.create(revision);
     res.status(201).json(successRes(201, newrevision));
   } catch (error) {
@@ -64,10 +66,26 @@ const remove = async (req, res) => {
   }
 };
 
+const submitExam = async (req, res) => {
+   const degree = {
+      student_degree: req.body.student_degree,
+      total_right_degree: req.body.total_right_degree,
+      total_wrong_degree: req.body.total_wrong_degree,
+    };
+    try {
+      const revision = await store.submitExam(req.params.id,degree);
+      res.status(200).json(successRes(200, revision));
+    } catch (error) {
+      res.status(404);
+      res.json(errorRes(404, error.message));
+    }
+}
+
 module.exports = {
   index,
   show,
   create,
   update,
   remove,
+  submitExam
 };

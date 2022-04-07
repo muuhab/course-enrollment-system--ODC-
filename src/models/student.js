@@ -1,5 +1,6 @@
 const client = require("../database");
 const bcrypt = require("bcrypt");
+const { stringBetweenParentheses } = require("../services/helpers");
 
 const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env;
 
@@ -97,16 +98,21 @@ class StudentStore {
   }
 
   async authenticate(username, password) {
-    const sql = "SELECT * FROM odc_students WHERE username=($1) ";
-    const conn = await client.connect();
-    const result = await conn.query(sql, [username]);
-    conn.release();
-    if (result.rows.length) {
-      const student = result.rows[0];
-      if (bcrypt.compareSync(password + BCRYPT_PASSWORD, student.password))
-        return student;
+    try {
+      const sql = "SELECT * FROM odc_students WHERE username=($1) ";
+      const conn = await client.connect();
+      const result = await conn.query(sql, [username]);
+      conn.release();
+      if (result.rows.length) {
+        const student = result.rows[0];
+        if (bcrypt.compareSync(password + BCRYPT_PASSWORD, student.password))
+          return student;
+        else throw new Error("password is not correct");
+      }
+      throw new Error("username not found");
+    } catch (error) {
+      throw new Error(error.message);
     }
-    return null;
   }
 }
 

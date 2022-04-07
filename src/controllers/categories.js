@@ -27,6 +27,8 @@ const create = async (req, res) => {
     category_name: req.body.category_name,
   };
   try {
+    if (!course.category_name) throw new Error("category name is missing");
+
     const newcourse = await store.create(course);
     res.status(201).json(successRes(201, newcourse));
   } catch (error) {

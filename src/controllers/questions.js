@@ -1,4 +1,5 @@
 const QuestionStore = require("../models/question");
+const { errorRes, successRes } = require("../services/response");
 const store = new QuestionStore();
 
 const index = async (_req, res) => {
@@ -28,6 +29,9 @@ const create = async (req, res) => {
     exam_id: req.body.exam_id,
   };
   try {
+    if (!question.question_content) throw new Error("question content is missing");
+    if (!question.question_answer) throw new Error("question answer is missing");
+    if (!question.exam_id) throw new Error("exam id is missing");
     const newquestion = await store.create(question);
     res.status(201).json(successRes(201, newquestion));
   } catch (error) {

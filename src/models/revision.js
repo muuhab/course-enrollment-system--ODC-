@@ -1,4 +1,5 @@
 const client = require("../database");
+const { stringBetweenParentheses } = require("../services/helpers");
 
 class RevisionStore {
   async index() {
@@ -82,6 +83,28 @@ class RevisionStore {
     } catch (error) {
       throw new Error(error.message);
     }
+  }
+
+  async submitExam(id, degree) {
+    const sql =
+      "UPDATE odc_revision SET student_degree=($1), total_right_degree=($2), total_wrong_degree=($3) where student_id=($4) RETURNING * ";
+    const conn = await client.connect();
+    const result = await conn.query(sql, [
+      degree.student_degree,
+      degree.total_right_degree,
+      degree.total_wrong_degree,
+      id,
+    ]);
+    conn.release();
+    return result.rows[0];
+  }
+  catch(error) {
+    if (error.code === "23505")
+      throw new Error(
+        `${stringBetweenParentheses(error.detail)} already exists`
+      );
+    if (error.code === "23502") throw new Error(`${error.column} is null`);
+    throw new Error(error.message);
   }
 }
 
