@@ -12,7 +12,7 @@ CREATE TABLE odc_admins (
 INSERT INTO odc_admins(username,
 email,
 password,image, role) VALUES('admin','admin@admin.com','$2a$10$HU2ERdVDqrxqdQ6MbWMcWO2U5NNUYFe45QWSY9eiF1Cv1Vj4KEGmy','asdjasjdsa.asdasdjasjd','admin'),
-('admin2','admin2@admin.com','$2a$10$HU2ERdVDqrxqdQ6MbWMcWO2U5NNUYFe45QWSY9eiF1Cv1Vj4KEGmy','asdjasjdsa.asdasdjasjd','admin'),
+('admin2','admin2@admin.com','$2a$10$HU2ERdVDqrxqdQ6MbWMcWO2U5NNUYFe45QWSY9eiF1Cv1Vj4KEGmy','asdjasjdsa.asdasdjasjd','sub-admin'),
 ('admin3','admin22@admin.com','$2a$10$HU2ERdVDqrxqdQ6MbWMcWO2U5NNUYFe45QWSY9eiF1Cv1Vj4KEGmy','asdjasjdsa.asdasdjasjd','admin'),
 ('admin4','admin33@admin.com','$2a$10$HU2ERdVDqrxqdQ6MbWMcWO2U5NNUYFe45QWSY9eiF1Cv1Vj4KEGmy','asdjasjdsa.asdasdjasjd','sub-admin'),
 ('admin5','admin3@admin.com','$2a$10$HU2ERdVDqrxqdQ6MbWMcWO2U5NNUYFe45QWSY9eiF1Cv1Vj4KEGmy','asdjasjdsa.asdasdjasjd','sub-admin'),

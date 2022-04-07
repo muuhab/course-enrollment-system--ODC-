@@ -12,9 +12,6 @@ router.delete("/:course_id", verifyAuthToken('sub-admin'), courseController.remo
 router.post("/", verifyAuthToken('sub-admin'), courseController.create);
 
 router.get("/:course_id/exams/", verifyAuthToken('sub-admin'), examsController.index);
-router.get("/:course_id/exams/:exam_id", verifyAuthToken('sub-admin'), examsController.show);
-router.put("/:course_id/exams/:exam_id", verifyAuthToken('sub-admin'), examsController.update);
-router.delete("/:course_id/exams/:exam_id", verifyAuthToken('sub-admin'), examsController.remove);
 router.post("/:course_id/exams/", verifyAuthToken('sub-admin'), examsController.create);
 
 module.exports = router;

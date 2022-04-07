@@ -30,7 +30,7 @@ const create = async (req, res) => {
     role: req.body.role,
     username: req.body.username,
     email: req.body.email,
-    password: req.body.password,
+    password: req.body.password.replace(/\s/g, ""),
     image: req.body.image,
   };
   try {
@@ -54,7 +54,7 @@ const create = async (req, res) => {
     );
     res
       .status(201)
-      .json(successRes(201, { username: admin.username, token: token }));
+      .json(successRes(201, { username: admin.username,role:admin.role, token: token }));
   } catch (error) {
     res.status(404);
     res.json(errorRes(404, error.message));
@@ -111,7 +111,7 @@ const authenticate = async (req, res) => {
         expiresIn: "30m",
       }
     );
-    res.json(successRes(200, { username: adminn.username, token }));
+    res.json(successRes(200, { username: adminn.username,role:adminn.role, token }));
   } catch (error) {
     res.status(404);
     res.json(errorRes(404, error.message));

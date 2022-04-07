@@ -20,8 +20,10 @@ class Categorystore {
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("categoriy is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       throw new Error(error.message);
     }
   }
@@ -50,8 +52,10 @@ class Categorystore {
       const conn = await client.connect();
       const result = await conn.query(sql, [category.category_name, id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("category is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       if (error.code === "23505")
         throw new Error(
           `${stringBetweenParentheses(error.detail)} already exists`
@@ -66,8 +70,10 @@ class Categorystore {
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("category is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       throw new Error(error.message);
     }
   }

@@ -26,17 +26,16 @@ const create = async (req, res) => {
   const question = {
     question_content: req.body.question_content,
     question_answer: req.body.question_answer,
-    exam_id: req.body.exam_id,
+    exam_id: req.params.exam_id,
   };
   try {
     if (!question.question_content) throw new Error("question content is missing");
     if (!question.question_answer) throw new Error("question answer is missing");
-    if (!question.exam_id) throw new Error("exam id is missing");
     const newquestion = await store.create(question);
     res.status(201).json(successRes(201, newquestion));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 const update = async (req, res) => {
@@ -50,7 +49,7 @@ const update = async (req, res) => {
     res.status(200).json(successRes(200, newquestion));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 
@@ -60,7 +59,7 @@ const remove = async (req, res) => {
     res.status(200).json(successRes(200, question));
   } catch (error) {
     res.status(404);
-    res.json(`${error}`);
+    res.json(errorRes(404, error.message));
   }
 };
 

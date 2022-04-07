@@ -20,8 +20,10 @@ class RevisionStore {
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("revision is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       throw new Error(error.message);
     }
   }
@@ -63,8 +65,10 @@ class RevisionStore {
         id,
       ]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("revision is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       if (error.code === "23505")
         throw new Error(
           `${stringBetweenParentheses(error.detail)} already exists`
@@ -79,8 +83,10 @@ class RevisionStore {
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("revision is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       throw new Error(error.message);
     }
   }
@@ -99,6 +105,7 @@ class RevisionStore {
     return result.rows[0];
   }
   catch(error) {
+    if (error.code === "22P02") throw new Error(`id must be integer`);
     if (error.code === "23505")
       throw new Error(
         `${stringBetweenParentheses(error.detail)} already exists`

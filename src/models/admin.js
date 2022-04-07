@@ -18,6 +18,7 @@ class AdminStore {
   }
 
   async show(id) {
+    console.log('asd')
     try {
       const sql = "SELECT * FROM odc_admins WHERE id=($1)";
       const conn = await client.connect();
@@ -26,6 +27,7 @@ class AdminStore {
       if (result.rows.length) return result.rows[0];
       else throw new Error("admin is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       throw new Error(error.message);
     }
   }
@@ -77,8 +79,10 @@ class AdminStore {
         id,
       ]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("admin is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       if (error.code === "23505")
         throw new Error(
           `${stringBetweenParentheses(error.detail)} already exists`
@@ -95,8 +99,8 @@ class AdminStore {
       conn.release();
       if (result.rows.length) return result.rows[0];
       else throw new Error("admin is not found");
-      return result.rows[0];
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       throw new Error(error.message);
     }
   }

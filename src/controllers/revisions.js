@@ -31,7 +31,12 @@ const create = async (req, res) => {
     student_id: req.body.student_id,
   };
   try {
-    // if (!admin.student_degree) throw new Error("email address is missing");
+    if (!revision.student_degree) throw new Error("student_degree is missing");
+    if (!revision.total_right_degree) throw new Error("total_right_degree is missing");
+    if (!revision.total_wrong_degree) throw new Error("total_wrong_degree is missing");
+    if (isNaN(revision.student_degree)) throw new Error("student's degree must be a number");
+    if (isNaN(revision.total_right_degree)) throw new Error("total right degree must be a number");
+    if (isNaN(revision.total_wrong_degree)) throw new Error("total wrong degree must be a number");
     const newrevision = await store.create(revision);
     res.status(201).json(successRes(201, newrevision));
   } catch (error) {

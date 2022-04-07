@@ -58,13 +58,14 @@ const authStudent = (admin = false, subadmin = false) => {
         process.env.TOKEN_SERCRET + student.username,
         function (err, decoded) {
           if (err) {
+            if ((admin = subadmin === false))
+              throw new Error("Access denied, invalid token");
             admin && jwt.verify(token, process.env.TOKEN_SERCRET + "admin");
             subadmin &&
               jwt.verify(token, process.env.TOKEN_SERCRET + "sub-admin");
           }
         }
       );
-
       next();
     } catch (error) {
       res.status(401);
@@ -103,17 +104,20 @@ const checkExpires = async (req, res, next) => {
   }
 };
 
-const notAuthed = (req, res, next) => {
-  try {
-    const authorizationHeader = req.headers.authorization;
-    if (!authorizationHeader) next();
-    else throw new Error("Can't access");
-  } catch (error) {
-    res.status(401);
-    res.json(errorRes(400, "Can't access"));
-    return;
-  }
-};
+// const notAuthed = (req, res, next) => {
+//   try {
+//     const authorizationHeader = req.headers.authorization;
+//     const token = authorizationHeader.split(" ")[1];
+//     const decoded = jwt.verify(token, process.env.TOKEN_SERCRET);
+//     next();
+//   } catch (error) {
+//     console.log("asdas");
+//     res.status(401);
+//     res.json(errorRes(401, "Can't access"));
+//     next();
+//     return;
+//   }
+// };
 
 module.exports = {
   authStudent,
@@ -121,5 +125,5 @@ module.exports = {
   checkExpires,
   verifyAuthToken,
   authAdmins,
-  notAuthed
+  // notAuthed,
 };

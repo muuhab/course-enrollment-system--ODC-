@@ -20,8 +20,10 @@ class TrainerStore {
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("trainer is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       throw new Error(error.message);
     }
   }
@@ -45,12 +47,14 @@ class TrainerStore {
   async update(trainer, id) {
     try {
       const sql =
-        "UPDATE odc_trainers SET course_id=($1) where id=($2) RETURNING * ";
+        "UPDATE odc_trainers SET name=($1) where id=($2) RETURNING * ";
       const conn = await client.connect();
       const result = await conn.query(sql, [trainer.name, id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("trainer is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       if (error.code === "23505")
         throw new Error(
           `${stringBetweenParentheses(error.detail)} already exists`
@@ -65,8 +69,10 @@ class TrainerStore {
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("trainer is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       throw new Error(error.message);
     }
   }
@@ -80,6 +86,7 @@ class TrainerStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       if (error.code === "23505")
         throw new Error(
           `${stringBetweenParentheses(error.detail)} already exists`

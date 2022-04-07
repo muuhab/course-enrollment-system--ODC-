@@ -23,15 +23,22 @@ const show = async (req, res) => {
   }
 };
 
+const showSingle = async (req, res) => {
+  try {
+    const enroll = await store.showSingle(req.params.id);
+    res.status(200).json(successRes(200, enroll));
+  } catch (error) {
+    res.status(404);
+    res.json(errorRes(404, error.message));
+  }
+};
+
 const create = async (req, res) => {
   const enroll = {
-    student_id: req.body.student_id,
-    course_id: req.body.course_id,
+    student_id: req.params.id,
+    course_id: req.params.course_id,
   };
   try {
-    if (!enroll.student_id) throw new Error("student id is missing");
-    if (!enroll.course_id) throw new Error("course id is missing");
-
     const newenroll = await store.create(enroll);
     res.status(201).json(successRes(201, newenroll));
   } catch (error) {
@@ -40,12 +47,8 @@ const create = async (req, res) => {
   }
 };
 const update = async (req, res) => {
-  const enroll = {
-    course_id: req.body.course_id,
-    status: req.body.status,
-  };
   try {
-    const newenroll = await store.update(enroll, req.params.id);
+    const newenroll = await store.update(req.body.status, req.params.id);
     res.status(200).json(successRes(200, newenroll));
   } catch (error) {
     res.status(404);
@@ -75,9 +78,10 @@ const genrateCode = async (req, res) => {
 };
 
 const changeExpiresHours = async (req, res) => {
-  const hours = req.params.hours;
+  const hours = req.body.hours;
   try {
-    if(hours<=0 && !hours) throw new Error("number of hours is missing");
+    if (!hours ) throw new Error("number of hours is missing ");
+    if (hours <= 0 ) throw new Error("wrong format for hours ");
     const newenroll = await store.changeExpiresHours(req.params.id, hours);
     res.status(200).json(successRes(200, newenroll));
   } catch (error) {
@@ -105,4 +109,5 @@ module.exports = {
   genrateCode,
   changeExpiresHours,
   viewStatus,
+  showSingle
 };

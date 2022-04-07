@@ -20,11 +20,28 @@ class EnrollStore {
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("student is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       throw new Error(error.message);
     }
   }
+
+  async showSingle(id) {
+    try {
+      const sql = "SELECT * FROM odc_enroll WHERE id=($1)";
+      const conn = await client.connect();
+      const result = await conn.query(sql, [id]);
+      conn.release();
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("enroll is not found");
+    } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
+      throw new Error(error.message);
+    }
+  }
+
   async create(enroll) {
     try {
       const sql =
@@ -39,31 +56,33 @@ class EnrollStore {
     } catch (error) {
       if (error.code === "23505")
         throw new Error(
-          `${stringBetweenParentheses(error.detail)} already exists`
+          `You are already enrolled`
         );
       if (error.code === "23502") throw new Error(`${error.column} is null`);
       throw new Error(error.message);
     }
   }
 
-  async update(enroll, id) {
+  async update(status, id) {
     try {
       const sql =
-        "UPDATE odc_enroll SET course_id=COALESCE($1,course_id)  status=COALESCE($2,status) where student_id=($3) RETURNING * ";
+        "UPDATE odc_enroll SET status=($1) where student_id=($2) RETURNING * ";
       const conn = await client.connect();
-      const result = await conn.query(sql, [
-        enroll.course_id,
-        enroll.status,
-        id,
-      ]);
+      const result = await conn.query(sql, [status, id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("category is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       if (error.code === "23505")
         throw new Error(
           `${stringBetweenParentheses(error.detail)} already exists`
         );
       if (error.code === "23502") throw new Error(`${error.column} is null`);
+      if (error.code === "23514")
+        throw new Error(
+          `status must include only any of these states [half-time, fail, pass]`
+        );
       throw new Error(error.message);
     }
   }
@@ -73,8 +92,10 @@ class EnrollStore {
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("enrollment is not found");
     } catch (error) {
+      if (error.code === "22P02") throw new Error(`id must be integer`);
       throw new Error(error.message);
     }
   }
@@ -108,13 +129,14 @@ class EnrollStore {
   async changeExpiresHours(id, hours) {
     try {
       const sql =
-        "UPDATE odc_enroll SET expire_after=($1) where student_id=($1) RETURNING * ";
+        "UPDATE odc_enroll SET expire_after=($1) where student_id=($2) RETURNING * ";
       const conn = await client.connect();
       const result = await conn.query(sql, [hours, id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows;
+      else throw new Error("student is not found");
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
   async viewStatus(id) {
@@ -125,7 +147,7 @@ class EnrollStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      throw new Error(`Something Wrong ${error}`);
+      throw new Error(error.message);
     }
   }
 }

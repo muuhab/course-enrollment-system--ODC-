@@ -1,4 +1,5 @@
 const TrainerStore = require("../models/trainer");
+const { errorRes, successRes } = require("../services/response");
 const store = new TrainerStore();
 
 const index = async (_req, res) => {
