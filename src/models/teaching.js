@@ -1,10 +1,10 @@
 const client = require("../database");
 const { stringBetweenParentheses } = require("../services/helpers");
 
-class TrainerStore {
+class TeachingStore {
   async index() {
     try {
-      const sql = "SELECT * FROM odc_trainers";
+      const sql = "SELECT * FROM odc_teaching";
       const conn = await client.connect();
       const result = await conn.query(sql);
       conn.release();
@@ -16,7 +16,7 @@ class TrainerStore {
 
   async show(id) {
     try {
-      const sql = "SELECT * FROM odc_trainers WHERE id=($1)";
+      const sql = "SELECT * FROM odc_teaching WHERE id=($1)";
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
@@ -25,11 +25,15 @@ class TrainerStore {
       throw new Error(error.message);
     }
   }
-  async create(trainer) {
+  async create(teaching) {
     try {
-      const sql = "INSERT INTO odc_trainers(name) VALUES($1) RETURNING *";
+      const sql =
+        "INSERT INTO odc_teaching(course_id, trainer_id) VALUES($1,$2) RETURNING *";
       const conn = await client.connect();
-      const result = await conn.query(sql, [trainer.name]);
+      const result = await conn.query(sql, [
+        teaching.course_id,
+        teaching.trainer_id,
+      ]);
       conn.release();
       return result.rows[0];
     } catch (error) {
@@ -42,12 +46,12 @@ class TrainerStore {
     }
   }
 
-  async update(trainer, id) {
+  async update(teaching, id) {
     try {
       const sql =
-        "UPDATE odc_trainers SET course_id=($1) where id=($2) RETURNING * ";
+        "UPDATE odc_teaching SET course_id=($1) trainer_id=($2) where id=($3) RETURNING * ";
       const conn = await client.connect();
-      const result = await conn.query(sql, [trainer.name, id]);
+      const result = await conn.query(sql, [teaching.course_id,teaching.trainer_id, id]);
       conn.release();
       return result.rows[0];
     } catch (error) {
@@ -61,7 +65,7 @@ class TrainerStore {
   }
   async delete(id) {
     try {
-      const sql = "DELETE FROM odc_trainers WHERE id=($1) RETURNING * ";
+      const sql = "DELETE FROM odc_teaching WHERE id=($1) RETURNING * ";
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
@@ -70,24 +74,6 @@ class TrainerStore {
       throw new Error(error.message);
     }
   }
-
-  async assignToCourse(course_id, trainer_id) {
-    try {
-      const sql =
-        "INSERT INTO odc_teaching(course_id, trainer_id) VALUES($1,$2) RETURNING *";
-      const conn = await client.connect();
-      const result = await conn.query(sql, [course_id, trainer_id]);
-      conn.release();
-      return result.rows[0];
-    } catch (error) {
-      if (error.code === "23505")
-        throw new Error(
-          `${stringBetweenParentheses(error.detail)} already exists`
-        );
-      if (error.code === "23502") throw new Error(`${error.column} is null`);
-      throw new Error(error.message);
-    }
-  }
 }
 
-module.exports = TrainerStore;
+module.exports = TeachingStore;
