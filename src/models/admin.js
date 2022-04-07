@@ -23,7 +23,8 @@ class AdminStore {
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("admin is not found");
     } catch (error) {
       throw new Error(error.message);
     }
@@ -53,7 +54,7 @@ class AdminStore {
           `${stringBetweenParentheses(error.detail)} already exists`
         );
       if (error.code === "23502") throw new Error(`${error.column} is null`);
-          
+
       throw new Error(error.message);
     }
   }
@@ -92,6 +93,8 @@ class AdminStore {
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
+      if (result.rows.length) return result.rows[0];
+      else throw new Error("admin is not found");
       return result.rows[0];
     } catch (error) {
       throw new Error(error.message);

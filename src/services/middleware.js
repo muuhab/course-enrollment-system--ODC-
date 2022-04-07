@@ -2,7 +2,7 @@ const StudentStore = require("../models/student");
 const EnrollStore = require("../models/enroll");
 const student_store = new StudentStore();
 const enroll_store = new EnrollStore();
-const {errorRes} = require("../services/response")
+const { errorRes } = require("../services/response");
 
 const jwt = require("jsonwebtoken");
 const { timeConverter } = require("./helpers");
@@ -17,7 +17,7 @@ const verifyAuthToken = (role) => {
       next();
     } catch (error) {
       res.status(401);
-      res.json(errorRes(401,"Access denied, invalid token"));
+      res.json(errorRes(401, "Access denied, invalid token"));
       return;
     }
   };
@@ -28,11 +28,20 @@ const authAdmins = (req, res, next) => {
   try {
     const authorizationHeader = req.headers.authorization;
     const token = authorizationHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.TOKEN_SERCRET + role);
+    jwt.verify(
+      token,
+      process.env.TOKEN_SERCRET + "admin",
+      function (err, decoded) {
+        if (err) {
+          jwt.verify(token, process.env.TOKEN_SERCRET + "sub-admin");
+        }
+      }
+    );
+
     next();
   } catch (error) {
     res.status(401);
-    res.json(errorRes(401,"Access denied, invalid token"));
+    res.json(errorRes(401, "Access denied, invalid token"));
     return;
   }
 };
@@ -59,7 +68,7 @@ const authStudent = (admin = false, subadmin = false) => {
       next();
     } catch (error) {
       res.status(401);
-      res.json(errorRes(401,"Access denied, invalid token"));
+      res.json(errorRes(401, "Access denied, invalid token"));
       return;
     }
   };
@@ -74,7 +83,7 @@ const verifyCode = async (req, res, next) => {
     next();
   } catch (error) {
     res.status(404);
-    res.json(errorRes(404,"Code is invaild"));
+    res.json(errorRes(404, "Code is invaild"));
     return;
   }
 };
@@ -89,9 +98,28 @@ const checkExpires = async (req, res, next) => {
     } else next();
   } catch (error) {
     res.status(404);
-    res.json(errorRes(404,"Code expired, please try again"));
+    res.json(errorRes(404, "Code expired, please try again"));
     return;
   }
 };
 
-module.exports = { authStudent, verifyCode, checkExpires, verifyAuthToken, authAdmins };
+const notAuthed = (req, res, next) => {
+  try {
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader) next();
+    else throw new Error("Can't access");
+  } catch (error) {
+    res.status(401);
+    res.json(errorRes(400, "Can't access"));
+    return;
+  }
+};
+
+module.exports = {
+  authStudent,
+  verifyCode,
+  checkExpires,
+  verifyAuthToken,
+  authAdmins,
+  notAuthed
+};

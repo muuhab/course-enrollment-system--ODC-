@@ -18,8 +18,6 @@ const index = async (_req, res) => {
 const show = async (req, res) => {
   try {
     const admin = await store.show(req.params.id);
-    if (admin === undefined)
-      res.status(404).json(errorRes(404, "Admin not found"));
     res.status(200).json(successRes(200, admin));
   } catch (error) {
     res.status(404);
@@ -91,9 +89,7 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
   try {
     const admin = await store.delete(req.params.id);
-    if (admin === undefined)
-      res.status(404).json(errorRes(404, "Admin not found"));
-    res.json(admin);
+    res.json(successRes(200, admin));
   } catch (error) {
     res.status(404);
     res.json(errorRes(404, error.message));
