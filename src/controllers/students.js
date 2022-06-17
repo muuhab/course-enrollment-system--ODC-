@@ -44,7 +44,7 @@ const create = async (req, res) => {
       throw new Error("email address is not valid ");
     if (student.password.length < 8)
       throw new Error("password must be at least 8 characters ");
-    if (!validator.isURL(student.image, []))
+    if (student.image && !validator.isURL(student.image, []))
       throw new Error("image path is not valid");
     if (!/^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/.test(student.student_phone))
       throw new Error("phone number is not valid");

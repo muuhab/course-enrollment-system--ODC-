@@ -54,10 +54,7 @@ class EnrollStore {
       conn.release();
       return result.rows[0];
     } catch (error) {
-      if (error.code === "23505")
-        throw new Error(
-          `You are already enrolled`
-        );
+      if (error.code === "23505") throw new Error(`You are already enrolled`);
       if (error.code === "23502") throw new Error(`${error.column} is null`);
       throw new Error(error.message);
     }
@@ -104,10 +101,13 @@ class EnrollStore {
     try {
       const sql =
         "UPDATE odc_enroll SET code=($1), code_time=(to_timestamp($2/ 1000.0)) where student_id=($3) RETURNING * ";
+      const sql2 = "SELECT email FROM odc_students WHERE id=($1);";
       const conn = await client.connect();
       const result = await conn.query(sql, [code, Date.now(), id]);
+      const result2 = await conn.query(sql2, [id]);
       conn.release();
-      return result.rows[0];
+      if (result.rows.length) return {...result.rows[0],...result2.rows[0]};
+      throw new Error("Your are not enrolled in any course")
     } catch (error) {
       throw new Error(error.message);
     }
