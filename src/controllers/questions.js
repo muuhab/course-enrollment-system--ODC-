@@ -7,8 +7,8 @@ const index = async (_req, res) => {
     const question = await store.index();
     res.status(200).json(successRes(200, question));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -17,8 +17,8 @@ const show = async (req, res) => {
     const question = await store.show(req.params.id);
     res.status(200).json(successRes(200, question));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -31,11 +31,11 @@ const create = async (req, res) => {
   try {
     if (!question.question_content) throw new Error("question content is missing");
     if (!question.question_answer) throw new Error("question answer is missing");
-    const newquestion = await store.create(question);
-    res.status(201).json(successRes(201, newquestion));
+    await store.create(question);
+    res.status(201).json(successRes(201, undefined,"Question created successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 const update = async (req, res) => {
@@ -45,21 +45,21 @@ const update = async (req, res) => {
     exam_id: req.body.exam_id,
   };
   try {
-    const newquestion = await store.update(question, req.params.id);
-    res.status(200).json(successRes(200, newquestion));
+    await store.update(question, req.params.id);
+    res.status(200).json(successRes(200, undefined,"Question updated successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
-    const question = await store.delete(req.params.id);
-    res.status(200).json(successRes(200, question));
+    await store.delete(req.params.id);
+    res.status(200).json(successRes(200, undefined,"Question deleted successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 

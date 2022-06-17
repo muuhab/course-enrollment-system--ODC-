@@ -7,8 +7,8 @@ const index = async (_req, res) => {
     const revision = await store.index();
     res.status(200).json(successRes(200, revision));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -17,8 +17,8 @@ const show = async (req, res) => {
     const revision = await store.show(req.params.id);
     res.status(200).json(successRes(200, revision));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -37,11 +37,11 @@ const create = async (req, res) => {
     if (isNaN(revision.student_degree)) throw new Error("student's degree must be a number");
     if (isNaN(revision.total_right_degree)) throw new Error("total right degree must be a number");
     if (isNaN(revision.total_wrong_degree)) throw new Error("total wrong degree must be a number");
-    const newrevision = await store.create(revision);
-    res.status(201).json(successRes(201, newrevision));
+    await store.create(revision);
+    res.status(201).json(successRes(201, undefined,"Revision created successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 const update = async (req, res) => {
@@ -53,21 +53,21 @@ const update = async (req, res) => {
     student_id: req.body.student_id,
   };
   try {
-    const newrevision = await store.update(revision, req.params.id);
-    res.status(200).json(successRes(200, newrevision));
+    await store.update(revision, req.params.id);
+    res.status(200).json(successRes(200, undefined,"Revision updated successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
-    const revision = await store.delete(req.params.id);
-    res.status(200).json(successRes(200, revision));
+    await store.delete(req.params.id);
+    res.status(200).json(successRes(200, undefined,"Revision deleted successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -81,8 +81,8 @@ const submitExam = async (req, res) => {
       const revision = await store.submitExam(req.params.id,degree);
       res.status(200).json(successRes(200, revision));
     } catch (error) {
-      res.status(404);
-      res.json(errorRes(404, error.message));
+      res.status(400);
+      res.json(errorRes(400, error.message));
     }
 }
 

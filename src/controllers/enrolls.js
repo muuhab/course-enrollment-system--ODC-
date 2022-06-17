@@ -8,8 +8,8 @@ const index = async (_req, res) => {
     const enrolls = await store.index();
     res.status(200).json(successRes(200, enrolls));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -18,8 +18,8 @@ const show = async (req, res) => {
     const enroll = await store.show(req.params.id);
     res.status(200).json(successRes(200, enroll));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -28,8 +28,8 @@ const showSingle = async (req, res) => {
     const enroll = await store.showSingle(req.params.id);
     res.status(200).json(successRes(200, enroll));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -39,30 +39,30 @@ const create = async (req, res) => {
     course_id: req.params.course_id,
   };
   try {
-    const newenroll = await store.create(enroll);
-    res.status(201).json(successRes(201, newenroll));
+    await store.create(enroll);
+    res.status(201).json(successRes(201, undefined,"Enroll created successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 const update = async (req, res) => {
   try {
-    const newenroll = await store.update(req.body.status, req.params.id);
-    res.status(200).json(successRes(200, newenroll));
+    await store.update(req.body.status, req.params.id);
+    res.status(200).json(successRes(200, undefined,"Enroll updated successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
-    const enroll = await store.delete(req.params.id);
-    res.status(200).json(successRes(200, enroll));
+    await store.delete(req.params.id);
+    res.status(200).json(successRes(200, undefined,"Enroll deleted successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -72,8 +72,8 @@ const genrateCode = async (req, res) => {
     const newenroll = await store.genrateCode(code, req.params.id);
     res.status(200).json(successRes(200, newenroll));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -85,8 +85,8 @@ const changeExpiresHours = async (req, res) => {
     const newenroll = await store.changeExpiresHours(req.params.id, hours);
     res.status(200).json(successRes(200, newenroll));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -95,8 +95,8 @@ const viewStatus = async (req, res) => {
     const enroll = await store.viewStatus(req.params.id);
     res.status(200).json(successRes(200, enroll));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 

@@ -10,8 +10,8 @@ const index = async (_req, res) => {
     const admins = await store.index();
     res.status(200).json(successRes(200, admins));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -20,8 +20,8 @@ const show = async (req, res) => {
     const admin = await store.show(req.params.id);
     res.status(200).json(successRes(200, admin));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -42,7 +42,7 @@ const create = async (req, res) => {
       throw new Error("email address is not valid ");
     if (admin.password.length < 8)
       throw new Error("password must be at least 8 characters ");
-    if (!validator.isURL(admin.image, []))
+    if (admin.image && !validator.isURL(admin.image, []))
       throw new Error("image path is not valid");
     if (!validator.isIn(admin.role, ["admin", "sub-admin"]))
       throw new Error("please specify correct roll");
@@ -56,8 +56,8 @@ const create = async (req, res) => {
       .status(201)
       .json(successRes(201, { username: admin.username,role:admin.role, token: token }));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 const update = async (req, res) => {
@@ -78,21 +78,21 @@ const update = async (req, res) => {
     if (admin.role && !validator.isIn(admin.role, ["admin", "sub-admin"]))
       throw new Error("please specify correct roll");
 
-    const adminn = await store.update(admin, req.params.id);
-    res.json(successRes(200, adminn));
+    await store.update(admin, req.params.id);
+    res.json(successRes(200, undefined, "Admin updated successfully."));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
-    const admin = await store.delete(req.params.id);
-    res.json(successRes(200, admin));
+    await store.delete(req.params.id);
+    res.json(successRes(200, undefined, "Admin removed successfully."));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -113,8 +113,8 @@ const authenticate = async (req, res) => {
     );
     res.json(successRes(200, { username: adminn.username,role:adminn.role, token }));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 

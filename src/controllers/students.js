@@ -9,8 +9,8 @@ const index = async (_req, res) => {
     const student = await store.index();
     res.status(200).json(successRes(200, student));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -19,8 +19,8 @@ const show = async (req, res) => {
     const student = await store.show(req.params.id);
     res.status(200).json(successRes(200, student));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -52,8 +52,8 @@ const create = async (req, res) => {
     const newstudent = await store.create(student);
     res.status(201).json(successRes(201, newstudent));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -79,21 +79,21 @@ const update = async (req, res) => {
     )
       throw new Error("phone number is not valid");
 
-    const newstudent = await store.update(student, req.params.id);
-    res.status(200).json(successRes(200, newstudent));
+    await store.update(student, req.params.id);
+    res.status(200).json(successRes(200, undefined,"Student updated successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
-    const student = await store.delete(req.params.id);
-    res.status(200).json(successRes(200, student));
+    await store.delete(req.params.id);
+    res.status(200).json(successRes(200, undefined,"Student deleted successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -116,8 +116,8 @@ const authenticate = async (req, res) => {
     );
     res.json({ username: authedStudent.username, token });
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 

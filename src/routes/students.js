@@ -11,8 +11,8 @@ router.get("/", authAdmins, studentsController.index);
 router.get("/:id", authStudent(true,true),  studentsController.show);
 router.put("/:id", authStudent(), studentsController.update);
 router.delete("/:id", authStudent(true,true), studentsController.remove);
-router.post("/", studentsController.create);
-router.post("/auth", studentsController.authenticate);
+router.post("/signup", studentsController.create);
+router.post("/signin", studentsController.authenticate);
 
 router.post("/:id/enroll/:course_id", authStudent(), enrollsController.create);
 router.get("/:id/enroll/", authStudent(), enrollsController.show);

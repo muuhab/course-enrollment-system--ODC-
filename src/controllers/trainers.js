@@ -7,8 +7,8 @@ const index = async (_req, res) => {
     const trainer = await store.index();
     res.status(200).json(successRes(200, trainer));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -17,8 +17,8 @@ const show = async (req, res) => {
     const trainer = await store.show(req.params.id);
     res.status(200).json(successRes(200, trainer));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -28,11 +28,11 @@ const create = async (req, res) => {
   };
   try {
     if (!trainer.name) throw new Error("trainer name is missing");
-    const newtrainer = await store.create(trainer);
-    res.status(201).json(successRes(201, newtrainer));
+    await store.create(trainer);
+    res.status(201).json(successRes(201, undefined,"Trainer created successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 const update = async (req, res) => {
@@ -40,21 +40,21 @@ const update = async (req, res) => {
     name: req.body.name,
   };
   try {
-    const newtrainer = await store.update(trainer, req.params.id);
-    res.status(200).json(successRes(200, newtrainer));
+    await store.update(trainer, req.params.id);
+    res.status(200).json(successRes(200, undefined,"Trainer update successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
-    const trainer = await store.delete(req.params.id);
-    res.status(200).json(successRes(200, trainer));
+    await store.delete(req.params.id);
+    res.status(200).json(successRes(200, undefined,"Trainer remove successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -64,8 +64,8 @@ const assignToCourse = async (req, res) => {
     const trainer = await store.assignToCourse(id, req.body.course_id);
     res.status(200).json(successRes(200, trainer));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 

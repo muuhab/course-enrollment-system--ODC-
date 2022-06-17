@@ -7,8 +7,8 @@ const index = async (_req, res) => {
     const course = await store.index();
     res.status(200).json(successRes(200, course));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -17,8 +17,8 @@ const show = async (req, res) => {
     const course = await store.show(req.params.course_id);
     res.status(200).json(successRes(200, course));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
@@ -33,11 +33,11 @@ const create = async (req, res) => {
     if (!course.course_level) throw new Error("course level is missing");
     if (!course.category_id) throw new Error("category id is missing");
     
-    const newcourse = await store.create(course);
-    res.status(201).json(successRes(201, newcourse));
+    await store.create(course);
+    res.status(201).json(successRes(201, undefined,"Course created successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 const update = async (req, res) => {
@@ -47,21 +47,21 @@ const update = async (req, res) => {
     category_id: req.body.category_id,
   };
   try {
-    const newcourse = await store.update(course, req.params.course_id);
-    res.status(200).json(successRes(200, newcourse));
+    await store.update(course, req.params.course_id);
+    res.status(200).json(successRes(200, undefined,"Course updated successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
 const remove = async (req, res) => {
   try {
-    const course = await store.delete(req.params.course_id);
-    res.status(200).json(successRes(200, course));
+    await store.delete(req.params.course_id);
+    res.status(200).json(successRes(200, undefined,"Course deleted successfully"));
   } catch (error) {
-    res.status(404);
-    res.json(errorRes(404, error.message));
+    res.status(400);
+    res.json(errorRes(400, error.message));
   }
 };
 
