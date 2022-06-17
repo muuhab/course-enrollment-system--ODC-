@@ -69,7 +69,7 @@ EMAIL_PASS=yourPassword
 
 ## Start App
 
-`yarn watch` or `npm run watch`
+`yarn dev` or `npm run dev`
 
 ### Running Ports
 
