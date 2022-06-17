@@ -87,8 +87,8 @@ Tokens are passed along with the http header as
 Authorization   Bearer <token>
 ```
 Also, There are multiple authorization (student, admin, sub-admin)
-Admin username: admin
-Admin password: 123
+- Admin username: admin
+- Admin password: 123
 
 
 ## Important Notes
